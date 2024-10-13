@@ -1,16 +1,39 @@
 package com.example.capstone;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 public class SignalController {
 
-    // GET 요청을 처리할 엔드포인트 생성
-    @GetMapping("/signal")
-    public String receiveSignal(@RequestParam("value") String value) {
-        // 외부에서 받은 값을 그대로 응답으로 반환a
-        return value;
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @PostMapping("/signal")
+    public String receiveFile(@RequestParam("file") MultipartFile file,
+                              @RequestParam(name = "save", defaultValue = "false") boolean save,
+                              @RequestParam(name = "archive", defaultValue = "false") boolean archive) throws IOException {
+        StringBuilder response = new StringBuilder("처리 결과: ");
+
+        if (save) {
+            fileStorageService.saveToFile(file);
+            response.append("파일 '").append(file.getOriginalFilename()).append("'이(가) 저장되었습니다. ");
+        }
+
+        if (archive) {
+            fileStorageService.archiveData(file.getOriginalFilename());
+            response.append("파일 '").append(file.getOriginalFilename()).append("'이(가) 아카이브되었습니다. ");
+        }
+
+        if (!save && !archive) {
+            response.append("저장 또는 아카이브되지 않았습니다.");
+        }
+
+        return response.toString();
     }
 }
