@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import MainPage from './MainPage';
 import './App.css';
+import FileUpload from './FileUpload';
+import FileDown from './FileDown';
 
-class App extends Component {
-  render() {
+function App() {
     return (
-      <div className="App">
-        <h1>메인 페이지 테스트 중...</h1>
-        <hr></hr>
-        <button>버튼 1</button>
-        <button>버튼 2</button>
-        <button>버튼 3</button>
-      </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/upload" element={<FileUpload />} />
+                <Route path="/download" element={<FileDown />} />
+            </Routes>
+        </Router>
     );
-  }
 }
 
 export default App;
