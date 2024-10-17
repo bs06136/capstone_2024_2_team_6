@@ -8,3 +8,5 @@ server을 컴퓨터에서 실행한다면 기본적으로 주소는 http://local
 
 현제 테스트 코드는 go 언어로 작성되었습니다.
 
+프론트 추가 패키지: 
+npm install @mui/material @emotion/react @emotion/styled
