@@ -134,10 +134,17 @@ float ButterFilter(float input) {
 }
 
 void valuePrint() {
+  float temp = 0;
+  int counter = 0;
   for(int i = 0; i < SAMPLES/2; i++) {
-    Serial.print(i);
-    Serial.print(" : ");
-    Serial.println(vReal[i]/SAMPLES);
+    temp += vReal[i];
+    if(counter++ == 3 && i/4 < 40) {
+      Serial.print(i/4);
+      Serial.print(" : ");
+      Serial.println(temp/SAMPLES/8);
+      counter = 0;
+      temp = 0;
+    }
 
   }
   for(int i = 0; i < SAMPLES; i++) {
