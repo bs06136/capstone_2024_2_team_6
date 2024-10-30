@@ -10,3 +10,5 @@ server을 컴퓨터에서 실행한다면 기본적으로 주소는 http://local
 
 프론트 추가 패키지: 
 npm install @mui/material @emotion/react @emotion/styled
+
+병합 문제가 조금 있었습니다
