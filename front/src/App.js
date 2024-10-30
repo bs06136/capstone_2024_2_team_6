@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import MainPage from './MainPage';
+import Login from './Login';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <h1>메인 페이지 테스트 중...</h1>
-        <hr></hr>
-        <button>버튼 1</button>
-        <button>버튼 2</button>
-        <button>버튼 3</button>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<MainPage></MainPage>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
+          </Routes>
+        </div>
+      </BrowserRouter>
     );
   }
 }
