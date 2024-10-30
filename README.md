@@ -8,5 +8,6 @@ server을 컴퓨터에서 실행한다면 기본적으로 주소는 http://local
 
 테스트 코드 추가(java, go)
 
-프론트 추가 패키지: 
-npm install @mui/material @emotion/react @emotion/styled
+절대 경로로 대상 파일이 지정되어 있습니다.  
+
+테스트시 확인 바랍니다.
