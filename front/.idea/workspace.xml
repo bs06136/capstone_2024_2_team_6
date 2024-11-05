@@ -4,51 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/../.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Arduino/FFT해서_서버로전달까지/FFT해서_서버로전달까지.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/DataController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/css/main.c59705dc.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/css/main.c59705dc.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/js/453.80efc53e.chunk.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/js/453.80efc53e.chunk.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/js/main.92b637fc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/js/main.92b637fc.js.LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/static/js/main.92b637fc.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/CapstoneApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/CapstoneApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/SampleDataHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/SampleDataHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/SignalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/com/example/capstone/SignalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata12.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata9.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/sampledata_1_7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_data/temp.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -175,7 +131,7 @@
       <workItem from="1730436470430" duration="604000" />
       <workItem from="1730446196142" duration="348000" />
       <workItem from="1730457673206" duration="597000" />
-      <workItem from="1730789397024" duration="688000" />
+      <workItem from="1730789397024" duration="690000" />
     </task>
     <servers />
   </component>
