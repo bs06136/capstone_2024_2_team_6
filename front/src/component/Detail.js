@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
-import {Box} from "@mui/material";
+import { Box } from "@mui/material";
 
-function Detail() {
+function Detail({ minRows = 6, Data, onChange, fieldDisable }) {
+    // 초기값으로 Data를 사용하고, 데이터가 없으면 빈 문자열로 설정
+    const [userDetail, setUserDetail] = useState(Data || "");
+
+    useEffect(() => {
+        // 부모로부터 Data 값이 변경되면 상태를 업데이트
+        setUserDetail(Data);
+    }, [Data]);  // Data가 변경될 때마다 업데이트
+
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        setUserDetail(newValue);  // 내부 상태 업데이트
+        onChange(newValue);       // 부모 컴포넌트에 값 전달
+    };
+
     return (
         <div>
             <TextField
                 id="User_detailed"
                 label="사용자 세부정보"
-                variant="outlined"
+                variant="standard"
                 multiline
                 fullWidth
-                height="100%"
-                minRows={6} // 원하는 줄 수만큼 설정
+                minRows={minRows} // 세로 크기랑 연관 있음
+                value={userDetail}  // 상태 값
+                disabled={fieldDisable}
+                onChange={handleChange}  // 값이 변경될 때 부모에게 전달
+                InputProps={{
+                    disableUnderline: true, // 바닥 선을 없앰
+                }}
             />
         </div>
     );

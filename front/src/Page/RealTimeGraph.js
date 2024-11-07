@@ -43,7 +43,7 @@ function RealTimeGraph() {
         fetchData();
         const interval = setInterval(() => {
             fetchData();
-        }, 3000);
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
