@@ -27,12 +27,6 @@ public class SignalController {
         try {
             if (jsonData.contains("sampledata")) {
                 return SampleDataHandler.saveSampleData(jsonData);
-            } else if (id != null && uniqueNumber != null) {
-                if (LoginHandler.validateSession(id, uniqueNumber)) {
-                    return "Data processed for user " + id;
-                } else {
-                    return "Invalid session or unauthorized access";
-                }
             } else {
                 return "Unsupported file name or missing headers";
             }
@@ -42,10 +36,6 @@ public class SignalController {
         }
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody String jsonData) {
-        return LoginHandler.processLoginAttempt(jsonData);
-    }
 
     @GetMapping("/api/data")
     public String getLatestData() {

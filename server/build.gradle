@@ -18,11 +18,20 @@ repositories {
 }
 
 dependencies {
-    implementation 'mysql:mysql-connector-java:8.0.33' // 최신 버전을 사용하세요
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'mysql:mysql-connector-java:8.0.33' // MySQL 커넥터
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot 웹 스타터
+
+    // Spring Boot 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // JUnit 5 (JUnit Jupiter) 라이브러리
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0' // JUnit API
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0' // JUnit 실행 엔진
+
+    // 추가: Spring MockMvc를 사용하기 위해 필요한 라이브러리
+    testImplementation 'org.springframework:spring-test'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
