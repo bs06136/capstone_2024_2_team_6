@@ -5,11 +5,13 @@ import UserSetting from "./component/UserSetting";
 import UserDetailPopup from "./Page/UserDetailPopup";
 import UserAddOrEdit from "./Page/UserAddOrEdit";
 import {Route, Routes} from "react-router-dom";
+import DeviceListDialog from "./component/DeviceListDialog";
+import Main from "./Page/Main";
 
 function App() {
   return (
       <div>
-          <UserDetailPopup />
+          <Main />
       </div>
   );
 }

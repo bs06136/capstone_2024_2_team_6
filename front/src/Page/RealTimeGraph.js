@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import '../css/RealTimeGraph.css';
+import config from "../config";
 
 Chart.register(...registerables);
 
@@ -16,7 +17,7 @@ function RealTimeGraph() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/data');
+            const response = await axios.get(`${config.apiUrl}/api/data`);
             const jsonData = JSON.parse(response.data.jsonData);
             const eegData = jsonData["EEG_Data(HZ)"];
             setEegData(eegData);
