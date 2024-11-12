@@ -7,8 +7,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @RestController
 public class DataController {
@@ -221,6 +227,151 @@ public class DataController {
         } catch (Exception e) {
             e.printStackTrace();
             return "Error processing device enrollment";
+        }
+    }
+
+    @PostMapping("/api/POST/initial_data")
+    public String receiveInitialData(@RequestBody String jsonData) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+
+            // arduino_id와 rfid_id를 문자열에서 int로 변환
+            int arduinoId = Integer.parseInt(rootNode.get("arduino_id").asText());
+            String rfidId = rootNode.get("rfid_id").asText();
+
+            // 데이터베이스 연결
+            Connection connection = DatabaseManager.getConnection();
+            if (connection == null) return "Database connection failed";
+
+            // 기존 매칭 삭제
+            String deleteQuery = "DELETE FROM matching WHERE arduino_user_id = ? OR worker_user_id = ?";
+            PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery);
+            deleteStmt.setInt(1, arduinoId);
+            deleteStmt.setString(2, rfidId);
+            deleteStmt.executeUpdate();
+            deleteStmt.close();
+
+            // arduino_id와 rfid_id 유효성 확인
+            String checkArduinoQuery = "SELECT COUNT(*) FROM arduino WHERE device_id = ?";
+            PreparedStatement checkArduinoStmt = connection.prepareStatement(checkArduinoQuery);
+            checkArduinoStmt.setInt(1, arduinoId);
+            ResultSet arduinoResult = checkArduinoStmt.executeQuery();
+            boolean arduinoExists = arduinoResult.next() && arduinoResult.getInt(1) > 0;
+            arduinoResult.close();
+            checkArduinoStmt.close();
+
+            String checkWorkerQuery = "SELECT COUNT(*) FROM worker WHERE user_id = ?";
+            PreparedStatement checkWorkerStmt = connection.prepareStatement(checkWorkerQuery);
+            checkWorkerStmt.setString(1, rfidId);
+            ResultSet workerResult = checkWorkerStmt.executeQuery();
+            boolean workerExists = workerResult.next() && workerResult.getInt(1) > 0;
+            workerResult.close();
+            checkWorkerStmt.close();
+
+            // 두 ID가 유효할 경우 매칭 추가
+            if (arduinoExists && workerExists) {
+                String adminIdQuery = "SELECT admin_id FROM worker WHERE user_id = ?";
+                PreparedStatement adminIdStmt = connection.prepareStatement(adminIdQuery);
+                adminIdStmt.setString(1, rfidId);
+                ResultSet adminResult = adminIdStmt.executeQuery();
+
+                int adminId = adminResult.next() ? adminResult.getInt("admin_id") : -1;
+                adminResult.close();
+                adminIdStmt.close();
+
+                if (adminId != -1) {
+                    String insertQuery = "INSERT INTO matching (worker_user_id, arduino_user_id, admin_num) VALUES (?, ?, ?)";
+                    PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+                    insertStmt.setString(1, rfidId);
+                    insertStmt.setInt(2, arduinoId);
+                    insertStmt.setInt(3, adminId);
+                    insertStmt.executeUpdate();
+                    insertStmt.close();
+                    return "true";
+                } else {
+                    return "Error: admin_id not found";
+                }
+            } else {
+                return "false";
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error processing request";
+        }
+    }
+
+    @PostMapping("/api/POST/sample_data")
+    public String receiveSampleData(@RequestBody String jsonData) {
+        try {
+            // 전달받은 JSON 데이터를 터미널에 출력
+            System.out.println("Received JSON data: " + jsonData);
+
+            // JSON 데이터를 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+
+            // 필요한 데이터 추출
+            int arduinoId = rootNode.path("ID").asInt(); // 아두이노 ID를 int로 처리
+            String eegData = rootNode.path("DATA").toString(); // JSON 배열을 문자열로 변환
+
+            if (arduinoId == 0) {
+                return "Invalid arduino ID";
+            }
+
+            // 데이터베이스 연결
+            Connection connection = DatabaseManager.getConnection();
+            if (connection == null) {
+                return "Database connection failed";
+            }
+
+            // 가장 최근 날짜와 data_order를 조회
+            String selectQuery = "SELECT date_time, data_order FROM sample_data WHERE user_id = ? ORDER BY date_time DESC LIMIT 1";
+            PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
+            selectStmt.setInt(1, arduinoId); // 아두이노 ID를 int로 설정
+            ResultSet resultSet = selectStmt.executeQuery();
+
+            // 기본값 설정
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            int dataOrder = 1;
+            boolean isNewDate = true;
+
+            if (resultSet.next()) {
+                LocalDateTime lastDateTime = resultSet.getTimestamp("date_time").toLocalDateTime();
+                int lastDataOrder = resultSet.getInt("data_order");
+
+                // 날짜 부분이 동일한 경우
+                if (lastDateTime.toLocalDate().equals(currentDateTime.toLocalDate())) {
+                    dataOrder = lastDataOrder + 1; // 오늘과 같은 날짜라면 data_order 증가
+                    isNewDate = false;
+                }
+            }
+            selectStmt.close();
+
+            // 새로운 날짜일 경우 data_order는 1로 설정
+            if (isNewDate) {
+                dataOrder = 1;
+            }
+
+            // 데이터 삽입 쿼리 작성
+            String insertQuery = "INSERT INTO sample_data (user_id, date_time, data_order, data_string) VALUES (?, ?, ?, ?)";
+            PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+            insertStmt.setInt(1, arduinoId); // 아두이노 ID를 int로 설정
+
+            // LocalDateTime을 Timestamp로 변환하여 삽입
+            insertStmt.setTimestamp(2, Timestamp.valueOf(currentDateTime));
+            insertStmt.setInt(3, dataOrder);
+            insertStmt.setString(4, eegData); // JSON 배열을 문자열로 저장
+
+            // 쿼리 실행
+            insertStmt.executeUpdate();
+            insertStmt.close();
+
+            return "Data saved successfully for arduino " + arduinoId + " with data order " + dataOrder;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error processing the request";
         }
     }
 
