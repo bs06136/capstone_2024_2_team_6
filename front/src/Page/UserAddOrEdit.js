@@ -9,29 +9,55 @@ import TextField from "@mui/material/TextField";
 import config from "../config";
 import { MenuItem, Select } from "@mui/material";
 
-function UserAddOrEdit({ givenName }) {
+function UserAddOrEdit({ givenName,userId }) {
     const [userName, setUserName] = React.useState(givenName);
     const [deviceId, setDeviceId] = React.useState("장치번호");
     const [userDetail, setUserDetail] = React.useState(" ");
     const [trackingOption, setTrackingOption] = React.useState("0"); // 0은 각성, 1은 졸음, 2는 수면
 
-    const deviceList = ["EEG1", "EEG2", "EEG3"];
+    const [deviceList,setDeviceList] = React.useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
 
     // GET 요청
     useEffect(() => {
+        // device 목록을 가져오는 비동기 함수
+        const getDeviceList = async () => {
+            try {
+                // 서버의 data_renew API를 호출
+                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`);
+
+                // 서버로부터 받은 데이터가 JSON 형태일 때
+                if (response.data) {
+                    // 서버 응답에서 device 목록 추출
+                    const deviceData = response.data;
+                    const devices = Object.keys(deviceData); // JSON 객체의 key를 사용하여 device 목록 추출
+
+                    // device 목록을 상태로 설정
+                    setDeviceList(devices);
+                }
+            } catch (error) {
+                console.error("Error fetching device list:", error);
+            }
+        };
+
+        // 사용자 정보와 세부 데이터를 가져오는 비동기 함수
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${config.apiUrl}/api/GET/${deviceId}/data`);
+                const response = await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/info`);
+
+                // 서버에서 받은 사용자 정보를 상태로 설정
                 setUserName(response.data["name"]);
                 setDeviceId(response.data["deviceId"]);
-                setUserDetail("\n" + response.data["detailData"]);
+                setUserDetail("\n" + response.data["detail"]);
             } catch (error) {
                 console.error("데이터를 가져오는 중 오류 발생:", error);
             }
         };
 
+        // 비동기 함수 호출
+        getDeviceList();
         fetchData();
-    }, []);
+    }, []); // 빈 배열을 사용하여 컴포넌트 마운트 시 한 번만 실행되도록
+
 
     // Post 요청
     const saveButton = async () => {
@@ -72,6 +98,7 @@ function UserAddOrEdit({ givenName }) {
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                     />
+                    <Typography>사용자 번호 : {userId}</Typography>
                     <Typography variant="h7" margin="10px"> 장치번호 </Typography>
                     <Select
                         labelId="demo-simple-select-label"

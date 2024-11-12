@@ -10,16 +10,17 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import config from "../config";
 
 // 스케일 등록
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function StickGraph() {
+function StickGraph(user_Id) {
     const [eegData, setEegData] = useState([]);
 
     const requestGet = async () => {
         try {
-            const response = await axios.get('https://77e2e873-b8fb-4235-9875-91b84eb6c5c3.mock.pstmn.io/api/GET/{user_id}/data');
+            const response = await axios.get(`${config.apiUrl}/api/GET/${user_Id}/data`);
             console.log("Server Response:", response.data);
 
             if (Array.isArray(response.data)) {

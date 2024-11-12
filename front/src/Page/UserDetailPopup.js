@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Actor from "../../../../capstone_2024_2_team_6/front/src/component/Actor";
 import UserStatus from "../../../../capstone_2024_2_team_6/front/src/component/UserStatus";
@@ -7,13 +7,30 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } 
 import '../css/UserDetailPopUp.css';
 import StickGraph from "../../../../capstone_2024_2_team_6/front/src/component/StickGraph";
 import UserAddOrEdit from "./UserAddOrEdit";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import config from "../config";
 
 const UserDetailPopup = ({userId}) => {
     const [open, setOpen] = useState(false);  // 다이얼로그의 열림/닫힘 상태를 관리
-    const [name, setName] = useState("");  // 이름 상태
-    {/*
-        사용자 정보를 get으로 받아오고 그 정보에서 데이터를 넣어줘야함.
-    */}
+    const [name, setName] = useState("로딩중");  // 이름
+    const [userDetail, setUserDetail] = useState("로딩중");
+    const [option, setOption] = useState("로딩중");
+
+    const getUserInfo = async () => {
+        try
+        {
+            const response =
+                await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/info`);
+
+        setName(response.data["name"]);
+        setUserDetail(response.data["detail"]);
+        setOption(response.data["option_value"]);
+        }
+        catch (error) {
+            //donothing
+        }
+    }
 
     // 다이얼로그 열기
     const handleEditClick = () => {
@@ -31,10 +48,14 @@ const UserDetailPopup = ({userId}) => {
         setOpen(false);  // 다이얼로그 닫기
     };
 
-    const [userDetail, setUserDetail] = useState("User에 대한 정보를 GET으로 받아와서 상세정보를 넣어줘야함. 그리고 메인페이지에서 UserId를 전달받아야 함. ");
+
     const handleDetailChange = (newDetail) => {
         setUserDetail(newDetail);
     };
+
+    useEffect( () => {
+            getUserInfo();
+    }, [])
 
     return (
         <div className="popup">
@@ -46,7 +67,7 @@ const UserDetailPopup = ({userId}) => {
             >
                 <DialogTitle>사용자 정보 입력</DialogTitle>
                 <DialogContent>
-                    <UserAddOrEdit userName={name}/>
+                    <UserAddOrEdit userName={name} userId={userId}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -59,11 +80,13 @@ const UserDetailPopup = ({userId}) => {
                 <div className="actor-section">
                     <div className="actor"><Actor/></div>
                     <div className="user-status">
-                        <Button variant="outlined">option:Get쓰는걸로수정해야됨</Button>
+                        <Button variant="outlined">{option}</Button>
                     </div>
                 </div>
 
                 <div className="detail-section">
+                    <Typography fontSize="h5">{name}</Typography>
+                    <Typography fontSize="h5">{userId}</Typography>
                     <div className="details" width="100%">
                         <Detail Data={userDetail} onChange={handleDetailChange} fieldDisable="true" />
                     </div>
@@ -72,7 +95,7 @@ const UserDetailPopup = ({userId}) => {
 
             <div className="lower-part">
                 <div className="graph-section">
-                    <div className="Stick-graph"><StickGraph /></div>
+                    <div className="Stick-graph"><StickGraph user_Id={userId} /></div>
                 </div>
             </div>
         </div>

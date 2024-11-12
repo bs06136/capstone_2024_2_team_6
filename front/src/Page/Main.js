@@ -41,7 +41,6 @@ function Main () {
             <DeviceListDialog
                 open={deviceOpen}
                 onClose={DeviceListClose}
-                deviceList={["EEG1","EEG2","EEG3"]}
             />
             <UserListDialog
                 open={userOpen}
@@ -49,12 +48,7 @@ function Main () {
                 userList={["User1","User2","User3"]}
             />
             <Dialog open={userDetailPopUp} onClose={UserClickClose}>
-                <UserDetailPopup/>
-                <DialogActions>
-                    <Button>
-                        추가
-                    </Button>
-                </DialogActions>
+                <UserDetailPopup userId={6594593}/>
             </Dialog>
 
 

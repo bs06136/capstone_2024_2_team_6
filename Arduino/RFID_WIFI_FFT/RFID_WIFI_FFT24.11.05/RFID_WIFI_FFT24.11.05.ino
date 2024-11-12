@@ -61,9 +61,8 @@ void setup() {
   ESP01.begin(9600); // ESP01의 시리얼 통신 속도 설정
   analogReadResolution(14);
 
-  while(!readRFID()) {
-    delay(100);
-  }
+  readRFID();
+
   
   connectToWiFi(SSID, PASSWORD);
   
@@ -173,9 +172,9 @@ void valuePrint() {
 
 //json 형식으로 만들어서 서버로 전송 
   StaticJsonDocument<200> doc;
-  doc["User"] = UID;
+  doc["user_id"] = UID;
   doc["Device"] = "EEG_No.1";
-  JsonArray EEG_Array = doc.createNestedArray("EEG_Data(HZ)");
+  JsonArray EEG_Array = doc.createNestedArray("EEG_Data");
   int total = 0;
   for(int i = 0; i < SAMPLES/2; i++) {
     total += vReal[i];
@@ -232,7 +231,7 @@ void sendDataToServer(const String& jsonData) {
   delay(1000);
 
   // POST 요청 구성
-  String postRequest = "POST /api HTTP/1.1\r\n";
+  String postRequest = "POST /signal HTTP/1.1\r\n";
   postRequest += "Host: " + String(SERVER_IP) + "\r\n";
   postRequest += "Content-Type: application/json\r\n";
   postRequest += "Content-Length: " + String(jsonData.length()) + "\r\n\r\n";
@@ -257,19 +256,21 @@ void sendDataToServer(const String& jsonData) {
 }
 
 boolean readRFID() {
-  // 카드가 인식되지 않으면 UID 문자열을 초기화하고 함수 종료
-  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
-    Serial.print("!"); // 카드 미인식 시 "!" 출력
-    return false;
+  while(!rfid.PICC_IsNewCardPresent()) {
+    Serial.println("Waiting for new Card");
+    delay(1000);
+  }
+  while(!rfid.PICC_ReadCardSerial()) {
+    // 카드 인식 대기
   }
 
   UID[0] = '\0'; // UID 문자열 초기화
 
-  // UID를 16진수 문자열로 변환하여 uidStr에 저장
+  // UID를 10진수 문자열로 변환하여 uidStr에 저장
   for (byte i = 0; i < rfid.uid.size; i++) {
-    char hexDigit[3];
-    sprintf(hexDigit, "%02X", rfid.uid.uidByte[i]);
-    strcat(UID, hexDigit);
+    char decimalDigit[10]; // 10진수로 표현한 값 저장할 공간
+    sprintf(decimalDigit, "%d", rfid.uid.uidByte[i]); // 10진수로 변환
+    strcat(UID, decimalDigit); // 변환된 값을 UID에 추가
   }
 
   // 카드와 통신 종료
@@ -277,9 +278,7 @@ boolean readRFID() {
   
   // UID 출력
   Serial.print("Card UID: ");
-  Serial.println(UID);
-  
-  delay(1000); // 1초 대기
+  Serial.println(UID); // 10진수 UID 출력
   
   return true; // 카드 인식 성공
 }
