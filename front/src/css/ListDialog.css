@@ -1,0 +1,10 @@
+.dialog {
+    width: 350px;
+}
+.List .MuiListItemText-root {
+    text-align: Left;
+}
+.addDevice {
+    display: flex;
+    flex-direction: row;
+}

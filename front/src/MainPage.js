@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './MainPage.css';
 import defaultImage from './images/default_profile.png';
+import DeviceListDialog from './component/DeviceListDialog';
+import UserListDialog from './component/UserListDialog';
+import UserDetailPopup from './Page/UserDetailPopup';
 import LEDSwitch from './LEDSwitch';
 import axios from 'axios';
+import { Dialog } from "@mui/material";
 
 
 class MainPage extends Component {
@@ -34,19 +38,50 @@ class Logo extends Component {
 }
 
 class Topbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      deviceOpen: false, // 다이얼로그의 열림/닫힘 상태
+      userOpen: false, // 다이얼로그의 열림/닫힘 상태
+      unique_number: props.unique_number
+    };
+  }
+
+  // 다이얼로그 열기
+  DeviceListClick = () => {
+    this.setState({ deviceOpen: true });
+  };
+
+  UserListClick = () => {
+    this.setState({ userOpen: true });
+  };
+
+  // 다이얼로그 닫기
+  DeviceListClose = () => {
+    this.setState({ deviceOpen: false });
+  };
+
+  UserListClose = () => {
+    this.setState({ userOpen: false });
+  };
+
   render() {
+    const { deviceOpen, userOpen, unique_number } = this.state;
+
     return (
       <div className="topbar">
         <ul>
-          <Link to="/">
-            <li>근무자 목록</li>
-          </Link>
-          <Link to="/">
-            <li>장비 목록</li>
-          </Link>
+          <li onClick={ this.UserListClick }>근무자 목록</li>
+          <li onClick={ this.DeviceListClick }>장비 목록</li>
           <li>목록 1</li>
           <li>목록 2</li>
         </ul>
+        <DeviceListDialog open={ deviceOpen } onClose={ this.DeviceListClose }></DeviceListDialog>
+        <UserListDialog
+          open={ userOpen }
+          onClose={ this.UserListClose }
+          userList={ ["User1", "User2", "User3"] }
+        ></UserListDialog>
       </div>
     );
   }
@@ -163,9 +198,25 @@ class Main extends Component {
 }
   
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userDetailPopUp: false,
+    };
+  }
+
+  UserClick = () => {
+    this.setState({ userDetailPopUp: true });
+  };
+
+  UserClickClose = () => {
+    this.setState({ userDetailPopUp: false });
+  };
+
   render() {
     const worker_id = this.props.worker_id;
     const data = this.props.data;
+    const { userDetailPopUp } = this.state;
 
     return (
       <div className="profile">
@@ -174,9 +225,12 @@ class Profile extends Component {
           <img src={ defaultImage } alt="테스트"></img>
           <LEDSwitch data={ data }></LEDSwitch>
         </div>
-        <button>
+        <button onClick={ this.UserClick }>
           상세 정보 확인
         </button>
+        <Dialog open={userDetailPopUp} onClose={this.UserClickClose}>
+          <UserDetailPopup userId={ worker_id } />
+        </Dialog>
       </div>
     );
   }
