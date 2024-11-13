@@ -10,8 +10,10 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Routes>
-          <Route path="/" element={<Login></Login>}></Route>
+            <Route path="/" element={<Login></Login>}></Route>
             <Route path="/main" element={<MainPage></MainPage>}></Route>
+            <Route path="/workers" element={<Login></Login>}></Route>
+            <Route path="devices" element={<Login></Login>}></Route>
           </Routes>
         </div>
       </BrowserRouter>
