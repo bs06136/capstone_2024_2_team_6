@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 import "./Login.css";
+import config from './config';
 
 class Login extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Login extends Component {
     
     try {
       const response = await axios.get( // 서버 주소에 맞게 변경
-        "https://e35c447b-f64a-49f7-b716-ad3207d52ba3.mock.pstmn.io/api/GET/login", {
+        config.apiUrl + "/api/GET/login", {
           method: 'GET',
           params: {
             user_id,
@@ -62,7 +63,7 @@ class Login extends Component {
           <label>ID</label>
           <input type="text" name="user_id" value={ user_id } onChange={ this.handleChange } required></input>
           <label>Password</label>
-          <input type="password" name="password" value={password} onChange={ this.handleChange } required></input>
+          <input type="password" name="password" value={ password } onChange={ this.handleChange } required></input>
           <button type="submit">Sign in</button>
         </form>
       </div>
