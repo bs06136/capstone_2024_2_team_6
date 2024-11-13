@@ -27,8 +27,28 @@ class Logo extends Component {
             캡스톤디자인 6팀
           </Link>
         </h1>
+        <Topbar></Topbar>
       </div>
-    )
+    );
+  }
+}
+
+class Topbar extends Component {
+  render() {
+    return (
+      <div className="topbar">
+        <ul>
+          <Link to="/">
+            <li>근무자 목록</li>
+          </Link>
+          <Link to="/">
+            <li>장비 목록</li>
+          </Link>
+          <li>목록 1</li>
+          <li>목록 2</li>
+        </ul>
+      </div>
+    );
   }
 }
   
@@ -65,14 +85,14 @@ class Body extends Component {
       });
 
       if (response.status == 200) {
-        // 서버에서 받은 데이터를 JSON 형식으로 파싱하여 배열로 저장
+        // 서버에서 받은 데이터를 JSON 형식으로 파싱하고 요소들을 구분하여 배열로 저장
         const dataList = Object.entries(response.data).map(([device_id, value]) => {
           const [worker_id, data] = value.split(', ');
           return { device_id, worker_id, data };
         });
-        // 서버에서 받은 JSON 데이터를 state에 저장
+        // 파싱한 배열 데이터를 state에 저장
         this.setState({ dataList });
-        console.log("데이터 갱신중...")
+        //console.log("데이터 갱신중...");
       }
     } catch (error) {
       console.error("데이터 가져오기 오류", error);
