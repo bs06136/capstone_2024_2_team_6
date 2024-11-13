@@ -5,3 +5,9 @@
     justify-self: center;
     padding: 100px;
 }
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
