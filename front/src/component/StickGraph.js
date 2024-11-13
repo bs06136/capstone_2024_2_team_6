@@ -12,24 +12,23 @@ import {
 } from 'chart.js';
 import config from "../config";
 
-// 스케일 등록
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function StickGraph(user_Id) {
+function StickGraph() {
     const [eegData, setEegData] = useState([]);
 
     const requestGet = async () => {
         try {
-            const response = await axios.get(`${config.apiUrl}/api/GET/${user_Id}/data`);
+            const response = await axios.get(`${config.apiUrl}/api/GET/detail/201/data`);
             console.log("Server Response:", response.data);
 
-            if (Array.isArray(response.data)) {
-                const eegDataList = response.data.map(item => calculateTAB(item.EEG_Data));
-                console.log("Processed EEG Data:", eegDataList);
-                setEegData(eegDataList);
-            } else {
-                console.error("Received data is not an array:", response.data);
-            }
+            const eegDataList = Object.values(response.data).map(item => {
+                const parsedData = JSON.parse(item);
+                return calculateTAB(parsedData);
+            });
+
+            setEegData(eegDataList);
+            console.log("Processed EEG Data:", eegDataList);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -37,12 +36,12 @@ function StickGraph(user_Id) {
 
     const calculateTAB = (data) => {
         if (data.length >= 30) {
-            const firstSum = data.slice(4, 14).reduce((acc, val) => acc + val, 0);
-            const secondSum = data.slice(13, 30).reduce((acc, val) => acc + val, 0);
+            const firstSum = data.slice(4, 13).reduce((acc, val) => acc + val, 0);
+            const secondSum = data.slice(14, 30).reduce((acc, val) => acc + val, 0);
             return firstSum / secondSum;
         } else {
             console.warn("EEG_Data does not have enough data points:", data);
-            return 0;  // 데이터가 부족한 경우 0을 반환
+            return 0;
         }
     };
 

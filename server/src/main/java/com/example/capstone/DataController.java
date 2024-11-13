@@ -26,15 +26,16 @@ public class DataController {
     }
 
     @GetMapping("/api/GET/data_renew")
-    public String getDataRenew(@RequestParam int user_id) {
+    public String getDataRenew(@RequestParam String user_id) {
         try {
+            System.out.println(user_id);
             Connection connection = DatabaseManager.getConnection();
             if (connection == null) return "Database connection failed";
 
             // 관리자 NUM에 해당하는 모든 근무자-아두이노 매칭 정보 조회
             String matchQuery = "SELECT worker_user_id, arduino_user_id FROM matching WHERE admin_num = ?";
             PreparedStatement matchStmt = connection.prepareStatement(matchQuery);
-            matchStmt.setInt(1, user_id);
+            matchStmt.setInt(1, Integer.parseInt(user_id));
             ResultSet matchRs = matchStmt.executeQuery();
 
             // JSON 데이터를 담을 ObjectMapper와 JSON 객체 생성
@@ -63,7 +64,7 @@ public class DataController {
 
                 sampleDataStmt.close();
             }
-
+            System.out.println(resultJson.toString());
             matchStmt.close();
             return resultJson.toString();
 

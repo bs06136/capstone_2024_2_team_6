@@ -113,9 +113,9 @@ class Body extends Component {
 
     try {
       const response = await axios.get(
-        'https://e35c447b-f64a-49f7-b716-ad3207d52ba3.mock.pstmn.io/api/GET/data_renew', {  // 서버 주소에 맞게 변경
+        'http://localhost:8080/api/GET/data_renew', {  // 서버 주소에 맞게 변경
         params: {
-          user_id: unique_number
+          user_id: "1"
         }
       });
 
