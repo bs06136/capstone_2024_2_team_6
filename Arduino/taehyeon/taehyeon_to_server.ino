@@ -10,10 +10,11 @@
 #define RX 2 // 아두이노의 RX 핀 (ESP-01의 TX에 연결)
 #define TX 3 // 아두이노의 TX 핀 (ESP-01의 RX에 연결)
 #define SAMPLE_RATE 256
-#define BAUD_RATE 115200
+#define BAUD_RATE 9600
 #define INPUT_PIN A0
 #define SAMPLES 256
 #define SAMPLE_TIME 2
+unsigned long timerInterval = 1000000 / SAMPLE_RATE;
 
 // Wi-Fi 및 서버 정보
 const char* ssid = "2ghome";
@@ -62,7 +63,6 @@ void loop() {
     } else { // EEG 데이터 측정 및 전송
         collectEEGData();
         send_EEG_DATA();
-        delay(1000);
     }
 }
 
@@ -120,6 +120,8 @@ void collectEEGData() {
     for (int i = 0; i < SAMPLES; i++) {
         unsigned long present = micros();
         unsigned long interval = present - past;
+        while(interval < timerInterval){
+        }
         past = present;
 
         int sensor_value = analogRead(INPUT_PIN);
@@ -131,6 +133,11 @@ void collectEEGData() {
     float dc_offset = sum / SAMPLES;
     for (int i = 0; i < SAMPLES; i++) {
         vReal[i] -= dc_offset;
+    }
+
+    for(int i = 0; i < SAMPLES; i++) {
+          vReal[i] = notchFilter(vReal[i]);//Notch Filter
+          vReal[i] = ButterFilter(vReal[i]);//Butter Filter
     }
 
     FFT.windowing(FFTWindow::Hamming, FFTDirection::Forward);
@@ -192,4 +199,50 @@ void sendATCommand(String command, const int timeout) {
             Serial.write(c);
         }
     }
+}
+
+float notchFilter(float input) {
+    // 필터 출력 계산
+    float output = (b0 / a1) * input + (b1 / a1) * x1 + (b2 / a1) * x2 - (a2 / a1) * y_1;
+
+    // 이전 샘플 업데이트
+    x2 = x1;
+    x1 = input;
+    y2 = y_1;
+    y_1 = output;
+
+    return output;
+}
+
+float ButterFilter(float input) {
+	float output = input;
+	{
+		static float z1, z2; // filter section state
+		float x = output - -0.95391350*z1 - 0.25311356*z2;
+		output = 0.00735282*x + 0.01470564*z1 + 0.00735282*z2;
+		z2 = z1;
+		z1 = x;
+	}
+	{
+		static float z1, z2; // filter section state
+		float x = output - -1.20596630*z1 - 0.60558332*z2;
+		output = 1.00000000*x + 2.00000000*z1 + 1.00000000*z2;
+		z2 = z1;
+		z1 = x;
+	}
+	{
+		static float z1, z2; // filter section state
+		float x = output - -1.97690645*z1 - 0.97706395*z2;
+		output = 1.00000000*x + -2.00000000*z1 + 1.00000000*z2;
+		z2 = z1;
+		z1 = x;
+	}
+	{
+		static float z1, z2; // filter section state
+		float x = output - -1.99071687*z1 - 0.99086813*z2;
+		output = 1.00000000*x + -2.00000000*z1 + 1.00000000*z2;
+		z2 = z1;
+		z1 = x;
+	}
+	return output;
 }

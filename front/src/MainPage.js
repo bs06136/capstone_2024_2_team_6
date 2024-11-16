@@ -223,7 +223,7 @@ class Profile extends Component {
         <p>{ worker_id }</p>
         <div className="person">
           <img src={ defaultImage } alt="테스트"></img>
-          <LEDSwitch data={ data }></LEDSwitch>
+          {/*<LEDSwitch data={ data }></LEDSwitch>*/}
         </div>
         <button onClick={ this.UserClick }>
           상세 정보 확인
