@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Actor from "../component/Actor";
 import Detail from "../component/Detail";
 import Button from "@mui/material/Button";
@@ -10,20 +10,25 @@ import config from "../config";
 import { MenuItem, Select } from "@mui/material";
 
 function UserAddOrEdit({ givenName,userId }) {
-    const [userName, setUserName] = React.useState(givenName);
-    const [deviceId, setDeviceId] = React.useState("장치번호");
-    const [userDetail, setUserDetail] = React.useState(" ");
-    const [trackingOption, setTrackingOption] = React.useState("0"); // 0은 각성, 1은 졸음, 2는 수면
-
-    const [deviceList,setDeviceList] = React.useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
+    const [userName, setUserName] = useState(givenName);
+    const [deviceId, setDeviceId] = useState("장치번호");
+    const [userDetail, setUserDetail] = useState(" ");
+    const [trackingOption, setTrackingOption] = useState("0"); // 0은 각성, 1은 졸음, 2는 수면
+    const [deviceList,setDeviceList] = useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
 
     // GET 요청
+    console.log(userId);
     useEffect(() => {
         // device 목록을 가져오는 비동기 함수
         const getDeviceList = async () => {
             try {
                 // 서버의 data_renew API를 호출
-                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`);
+                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`, {
+                    params: {
+                        user_id: userId
+                    }
+                });
+
 
                 // 서버로부터 받은 데이터가 JSON 형태일 때
                 if (response.data) {
@@ -64,7 +69,7 @@ function UserAddOrEdit({ givenName,userId }) {
         try {
             const response = await axios.post(`${config.apiUrl}/api/POST/user/enrollment`, {
                 name: userName,
-                deviceId: deviceId,
+                user_id: userId,
                 detailData: userDetail,
                 option: trackingOption
             });
@@ -103,7 +108,7 @@ function UserAddOrEdit({ givenName,userId }) {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={deviceId}
+                        value={userId}
                         label="device"
                         onChange={deviceSelect}
                     >

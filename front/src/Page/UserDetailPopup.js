@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import Actor from "../../../../capstone_2024_2_team_6/front/src/component/Actor";
-import UserStatus from "../../../../capstone_2024_2_team_6/front/src/component/UserStatus";
-import Detail from "../../../../capstone_2024_2_team_6/front/src/component/Detail";
+import Actor from "../component/Actor";
+import UserStatus from "../component/UserStatus";
+import Detail from "../component/Detail";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material'; // MUI Dialog 컴포넌트 임포트
 import '../css/UserDetailPopUp.css';
-import StickGraph from "../../../../capstone_2024_2_team_6/front/src/component/StickGraph";
+import StickGraph from "../component/StickGraph";
 import UserAddOrEdit from "./UserAddOrEdit";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
@@ -88,7 +88,10 @@ const UserDetailPopup = ({userId}) => {
                     <Typography fontSize="h5">{name}</Typography>
                     <Typography fontSize="h5">{userId}</Typography>
                     <div className="details" width="100%">
-                        <Detail Data={userDetail} onChange={handleDetailChange} fieldDisable="true" />
+                        <Detail Data={userDetail}
+                                onChange={handleDetailChange}
+                                fieldDisable={true}
+                        />
                     </div>
                 </div>
             </div>

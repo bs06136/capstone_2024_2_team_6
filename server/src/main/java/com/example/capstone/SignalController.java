@@ -25,7 +25,7 @@ public class SignalController {
             @RequestHeader(value = "Unique-Number", required = false) String uniqueNumber
     ) {
         try {
-            if (jsonData.contains("EEG_Data")) {
+            if (jsonData.contains("sampledata")) {
                 return SampleDataHandler.saveSampleData(jsonData);
             } else {
                 return "Unsupported file name or missing headers";

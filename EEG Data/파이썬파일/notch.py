@@ -5,11 +5,11 @@ from scipy.signal.windows import hamming
 import matplotlib.pyplot as plt
 
 # CSV 파일 읽기
-file_path = r"D:\캡스톤 디자인(1)\capstone_2024_2_team_6\EEG Data\테스트 측정 데이터\recorded_data_2024-10-29_17-46-18.csv"  # 파일 경로 수정
+file_path = r"D:\캡스톤 디자인(1)\capstone_2024_2_team_6\EEG Data\테스트 측정 데이터\24.10.31\눈감음아침\recorded_data_2024-10-31_09-45-31.csv"  # 파일 경로 수정
 data = pd.read_csv(file_path)  # 헤더가 있음
 
 # counter 값 선택
-counter = data['channel_1'].values
+counter = data['channel_1'].values[0:2048]
 
 # 샘플링 주파수 설정
 fs = 256.0
@@ -86,27 +86,27 @@ plt.figure(figsize=(12, 12))
 
 # 원본 신호 그래프
 plt.subplot(4, 1, 1)
-plt.plot(counter, label='Raw EEG (Counter)', color='blue')
-plt.title('Raw EEG Signal (Counter)')
-plt.xlabel('Sample Index')
-plt.ylabel('Amplitude')
+plt.plot(counter, label='Raw EEG', color='blue')
+plt.title('Raw')
+plt.xlabel('Index')
+plt.ylabel('power')
 plt.legend()
 plt.grid()
 
 # 클린 신호 그래프
 plt.subplot(4, 1, 2)
-plt.plot(counter_clean, label='Clean EEG (Counter)', color='orange')
-plt.title('Clean EEG Signal (Counter)')
-plt.xlabel('Sample Index')
-plt.ylabel('Amplitude')
+plt.plot(counter_clean, label='Clean EEG', color='orange')
+plt.title('Filtered')
+plt.xlabel('Index')
+plt.ylabel('power')
 plt.legend()
 plt.grid()
 
 # 원본 신호 FFT 결과 그래프
 plt.subplot(4, 1, 3)
-plt.plot(f_raw, fft_magnitude_raw, label='FFT of Raw EEG (Counter)', color='green')
-plt.title('FFT of Raw EEG Signal (Counter)')
-plt.xlabel('Frequency (Hz)')
+plt.plot(f_raw, fft_magnitude_raw, label='FFT Raw', color='green')
+plt.title('FFT Raw')
+plt.xlabel('Hz')
 plt.ylabel('Magnitude')
 plt.xlim(0, 100)  # 0~100Hz 주파수 범위만 표시
 plt.legend()
@@ -121,9 +121,9 @@ plt.axvspan(30, 100, color='red', alpha=0.3, label='Gamma (30Hz 이상)')  # 감
 
 # 클린 신호 FFT 결과 그래프
 plt.subplot(4, 1, 4)
-plt.plot(f_clean, fft_magnitude_clean, label='FFT of Clean EEG (Counter)', color='red')
-plt.title('FFT of Clean EEG Signal (Counter)')
-plt.xlabel('Frequency (Hz)')
+plt.plot(f_clean, fft_magnitude_clean, label='FFT Filtered', color='red')
+plt.title('FFT Filtered')
+plt.xlabel('Hz')
 plt.ylabel('Magnitude')
 plt.xlim(0, 100)  # 0~100Hz 주파수 범위만 표시
 plt.legend()

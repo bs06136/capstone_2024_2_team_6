@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ActorImage from '../Image/Actor.png';
+import ActorImage from '../images/Actor.png';
 
 function Actor({ userName, imageOption }) {
     const [userImage, setUserImage] = useState(null);
@@ -22,7 +22,7 @@ function Actor({ userName, imageOption }) {
             }
         };
 
-        fetchUserImage();
+        // fetchUserImage();
     }, [userName]);
 
     // 이미지 업로드 핸들러

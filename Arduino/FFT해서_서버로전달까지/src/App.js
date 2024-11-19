@@ -1,4 +1,4 @@
-// src/App.js
+// src/App.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';

@@ -4,11 +4,15 @@ import { Box } from "@mui/material";
 
 function Detail({ minRows = 6, Data, onChange, fieldDisable }) {
     // 초기값으로 Data를 사용하고, 데이터가 없으면 빈 문자열로 설정
-    const [userDetail, setUserDetail] = useState(Data || "");
+    const [userDetail, setUserDetail] = useState(Data || "");  // Data가 없으면 빈 문자열로 초기화
 
     useEffect(() => {
         // 부모로부터 Data 값이 변경되면 상태를 업데이트
-        setUserDetail(Data);
+        if (Data !== undefined && Data !== null) {
+            setUserDetail(Data);  // Data가 유효할 때만 상태 업데이트
+        } else {
+            setUserDetail("");  // Data가 없으면 빈 문자열로 설정
+        }
     }, [Data]);  // Data가 변경될 때마다 업데이트
 
     const handleChange = (event) => {
@@ -26,7 +30,7 @@ function Detail({ minRows = 6, Data, onChange, fieldDisable }) {
                 multiline
                 fullWidth
                 minRows={minRows} // 세로 크기랑 연관 있음
-                value={userDetail}  // 상태 값
+                value={userDetail || ""}  // 상태 값 (항상 정의된 값으로 전달)
                 disabled={fieldDisable}
                 onChange={handleChange}  // 값이 변경될 때 부모에게 전달
                 InputProps={{
