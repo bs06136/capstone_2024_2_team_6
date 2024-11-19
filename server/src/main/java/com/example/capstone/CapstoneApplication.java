@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CapstoneApplication {
 
     public static void main(String[] args) {
+        DatabaseManager.initialize();  // 여기에 초기화 추가
         SpringApplication.run(CapstoneApplication.class, args);
     }
-
 }
