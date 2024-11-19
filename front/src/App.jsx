@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import MainPage from './MainPage';
 import Login from './Login';
-import DrousyAndStressSideBar from "./component/DrousyAndStressSideBar";
 
 
 class App extends Component {
