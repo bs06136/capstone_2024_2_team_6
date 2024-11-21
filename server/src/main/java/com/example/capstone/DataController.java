@@ -159,7 +159,7 @@ public class DataController {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(jsonData);
 
-            String userId = rootNode.path("user_id").asText();
+            String userId = rootNode.path("worker_id").asText();
             String workerName = rootNode.path("worker_name").asText();
             String detail = rootNode.path("detail").asText();
             int option = rootNode.path("option").asInt();
