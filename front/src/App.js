@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import MainPage from './MainPage';
+import { AuthProvider } from './Login';
 import Login from './Login';
+import MainPageWrapper from './MainPage';
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Login></Login>}></Route>
-            <Route path="/main" element={<MainPage></MainPage>}></Route>
-            <Route path="/workers" element={<Login></Login>}></Route>
-            <Route path="devices" element={<Login></Login>}></Route>
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/main" element={<MainPageWrapper />} />
+              <Route path="/workers" element={<Login />} />
+              <Route path="/devices" element={<Login />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </AuthProvider>
     );
   }
 }

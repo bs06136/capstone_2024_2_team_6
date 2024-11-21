@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './Login';
 import './MainPage.css';
 import defaultImage from './images/default_profile.png';
 import DeviceListDialog from './component/DeviceListDialog';
@@ -8,7 +9,8 @@ import UserDetailPopup from './Page/UserDetailPopup';
 import LEDSwitch from './LEDSwitch';
 import axios from 'axios';
 import { Dialog } from "@mui/material";
-
+import config from './config';
+import Card from "@mui/material"
 
 class MainPage extends Component {
     render() {
@@ -43,7 +45,7 @@ class Topbar extends Component {
     this.state = {
       deviceOpen: false, // 다이얼로그의 열림/닫힘 상태
       userOpen: false, // 다이얼로그의 열림/닫힘 상태
-      unique_number: props.unique_number
+      //unique_number: props.unique_number
     };
   }
 
@@ -66,7 +68,7 @@ class Topbar extends Component {
   };
 
   render() {
-    const { deviceOpen, userOpen, unique_number } = this.state;
+    const { deviceOpen, userOpen } = this.state;
 
     return (
       <div className="topbar">
@@ -88,11 +90,12 @@ class Topbar extends Component {
 }
   
 class Body extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
       dataList: [],
-      unique_number: props.unique_number
     };
   }
 
@@ -100,7 +103,7 @@ class Body extends Component {
     this.fetchData();
 
     // N 초마다 데이터를 갱신하도록 설정
-    this.interval = setInterval(this.fetchData, 5000);  // 5초
+    this.interval = setInterval(this.fetchData, 5000000);  // 5000초
   }
 
   componentWillUnmount() {
@@ -108,18 +111,21 @@ class Body extends Component {
     clearInterval(this.interval);
   }
 
-  fetchData = async() => {
-    const { unique_number } = this.state;
+  fetchData = async () => {
+    const { unique_number } = this.context;
+
+    console.log("MainPage unique_number : ", unique_number)
 
     try {
       const response = await axios.get(
-        'https://e35c447b-f64a-49f7-b716-ad3207d52ba3.mock.pstmn.io/api/GET/data_renew', {  // 서버 주소에 맞게 변경
-        params: {
-          user_id: unique_number
+        config.apiUrl + '/api/GET/data_renew', {  // 서버 주소에 맞게 변경
+          params: {
+            user_id: unique_number
+          }
         }
-      });
+      );
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         // 서버에서 받은 데이터를 JSON 형식으로 파싱하고 요소들을 구분하여 배열로 저장
         const dataList = Object.entries(response.data).map(([device_id, value]) => {
           const [worker_id, data] = value.split(', ');
@@ -140,9 +146,9 @@ class Body extends Component {
     return (
       <div className="body">
         <Sidebar></Sidebar>
-        <Main dataList={ dataList }></Main>
+        <Main dataList={dataList}></Main>
       </div>
-    )
+    );
   }
 }
   
