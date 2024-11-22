@@ -72,7 +72,7 @@ public class DataController {
                 stressStmt.close();
 
                 // JSON 객체에 추가
-                String value = focusScore + ", " + stressScore;
+                String value = focusScore + "," + stressScore;
                 resultJson.put(workerUserId, value);
             }
             System.out.println(resultJson.toString());
@@ -593,9 +593,9 @@ public class DataController {
     }
 
 
-    @GetMapping("/api/GET/detail/{worker_id}/data_period")
+    @GetMapping("/api/GET/detail/data_period")
     public String getDataForPeriod(
-            @PathVariable String worker_id,
+            @RequestParam String worker_id,
             @RequestParam String start_time,
             @RequestParam String end_time) {
 
