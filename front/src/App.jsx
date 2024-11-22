@@ -10,17 +10,16 @@ import StickGraph from "./component/StickGraph";
 class App extends Component {
   render() {
     return (
-    //   <BrowserRouter>
-    //     <div className="App">
-    //       <Routes>
-    //         <Route path="/" element={<Login></Login>}></Route>
-    //         <Route path="/main" element={<MainPage></MainPage>}></Route>
-    //         <Route path="/workers" element={<Login></Login>}></Route>
-    //         <Route path="devices" element={<Login></Login>}></Route>
-    //       </Routes>
-    //     </div>
-    //   </BrowserRouter>
-        <Statistics/>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Login></Login>}></Route>
+            <Route path="/main" element={<MainPage></MainPage>}></Route>
+            <Route path="/workers" element={<Login></Login>}></Route>
+            <Route path="devices" element={<Login></Login>}></Route>
+          </Routes>
+        </div>
+      </BrowserRouter>
     );
   }
 }

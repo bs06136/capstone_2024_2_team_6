@@ -14,41 +14,41 @@ ChartJS.register(
 );
 
 function StatisticsGraph(Data) {
-    // const rawData = Data.body
-    const rawData = {
-        day: "2024-10-15,2024-10-15,2024-10-16,2024-11-19,2024-11-19,2024-11-19,2024-11-20,2024-11-20,2024-12-05,2024-12-05,2024-12-06",
-        stress: "0.4,0.5,0.6,0.1,0.2,0.3,0.5,0.5,0.3,0.4,0.2",
-        concentration: "3,3.5,4,5,4,3,2,3.5,4,4.2,3.8",
-    };
+    const rawData = Data.Data;
 
     const [processedData, setProcessedData] = useState({ labels: [], stressData: [], concentrationData: [] });
 
     useEffect(() => {
-        // rawData를 파싱하여 processedData 형식으로 변환
-        const days = rawData.day.split(",");
-        const stressValues = rawData.stress.split(",").map(Number);
-        const concentrationValues = rawData.concentration.split(",").map(Number);
+        try {
+            // rawData를 파싱하여 processedData 형식으로 변환
+            const days = rawData.day
+            const stressValues = rawData.stress.map(parseFloat);
+            const concentrationValues = rawData.concentration.map(parseFloat);
 
-        const uniqueDates = [...new Set(days)];
+            const uniqueDates = [...new Set(days)];
 
-        const stressData = uniqueDates.map(date => {
-            const dateIndexes = days.filter(d => d === date);
-            const avgStress = dateIndexes.reduce((acc, index) => acc + stressValues[days.indexOf(index)], 0) / dateIndexes.length;
-            return avgStress;
-        });
+            const stressData = uniqueDates.map(date => {
+                const dateIndexes = days.filter(d => d === date);
+                const avgStress = dateIndexes.reduce((acc, index) => acc + stressValues[days.indexOf(index)], 0) / dateIndexes.length;
+                return avgStress;
+            });
 
-        const concentrationData = uniqueDates.map(date => {
-            const dateIndexes = days.filter(d => d === date);
-            const avgConcentration = dateIndexes.reduce((acc, index) => acc + concentrationValues[days.indexOf(index)], 0) / dateIndexes.length;
-            return avgConcentration;
-        });
+            const concentrationData = uniqueDates.map(date => {
+                const dateIndexes = days.filter(d => d === date);
+                const avgConcentration = dateIndexes.reduce((acc, index) => acc + concentrationValues[days.indexOf(index)], 0) / dateIndexes.length;
+                return avgConcentration;
+            });
 
-        setProcessedData({
-            labels: uniqueDates,
-            stressData: stressData,
-            concentrationData: concentrationData,
-        });
-    }, []);
+            setProcessedData({
+                labels: uniqueDates,
+                stressData: stressData,
+                concentrationData: concentrationData,
+            });
+        } catch (error) {
+            console.error("Error processing data:", error);
+            setProcessedData({ labels: [], stressData: [], concentrationData: [] }); // 에러가 발생하면 빈 데이터로 설정
+        }
+    }, [rawData]); // rawData가 변경될 때마다 새로 처리
 
     // 그래프 데이터 설정
     const data = {
@@ -100,6 +100,11 @@ function StatisticsGraph(Data) {
             },
         },
     };
+
+    // 데이터가 비어있으면 그래프를 렌더링하지 않음
+    if (processedData.labels.length === 0) {
+        return null; // 그래프를 그리지 않음
+    }
 
     return (
         <div>

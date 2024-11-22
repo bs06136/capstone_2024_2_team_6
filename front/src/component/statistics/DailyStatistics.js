@@ -6,45 +6,47 @@ import "../../css/statistics/DailyStatistics.css";
 
 function DailyStatistics(Data) {
     const [processedData, setProcessedData] = useState([]);
-
-    // const rawData = Data.body
-    const rawData = {
-        day: "2024-10-15,2024-10-15,2024-10-16,2024-11-19,2024-11-19,2024-11-19,2024-11-20,2024-11-20,2024-12-05,2024-12-05,2024-12-06",
-        stress: "0.4,0.5,0.6,0.1,0.2,0.3,0.5,0.5,0.3,0.4,0.2",
-        concentration: "3,3.5,4,5,4,3,2,3.5,4,4.2,3.8",
-    };
+    const rawData = Data.Data;
 
     useEffect(() => {
         const processData = (data) => {
-            const days = data.day.split(",");
-            const stressValues = data.stress.split(",").map(Number);
-            const concentrationValues = data.concentration.split(",").map(Number);
+            try {
 
-            const groupedData = {};
-            days.forEach((day, index) => {
-                if (!groupedData[day]) {
-                    groupedData[day] = { stress: [], concentration: [] };
-                }
-                groupedData[day].stress.push(stressValues[index]);
-                groupedData[day].concentration.push(concentrationValues[index]);
-            });
+                // 데이터 처리
+                const days = data.day
+                const stressValues = data.stress.map(parseFloat);
+                const concentrationValues = data.concentration.map(parseFloat);
 
-            // 평균 계산
-            const averagedData = Object.entries(groupedData).map(([day, values]) => ({
-                day,
-                averageStress:
-                    values.stress.reduce((sum, val) => sum + val, 0) / values.stress.length,
-                averageConcentration:
-                    values.concentration.reduce((sum, val) => sum + val, 0) /
-                    values.concentration.length,
-            }));
+                const groupedData = {};
+                days.forEach((day, index) => {
+                    if (!groupedData[day]) {
+                        groupedData[day] = { stress: [], concentration: [] };
+                    }
+                    groupedData[day].stress.push(stressValues[index]);
+                    groupedData[day].concentration.push(concentrationValues[index]);
+                });
 
-            return averagedData;
+                // 평균 계산
+                const averagedData = Object.entries(groupedData).map(([day, values]) => ({
+                    day,
+                    averageStress:
+                        values.stress.reduce((sum, val) => sum + val, 0) / values.stress.length,
+                    averageConcentration:
+                        values.concentration.reduce((sum, val) => sum + val, 0) /
+                        values.concentration.length,
+                }));
+
+                return averagedData;
+            } catch (error) {
+                console.error("Error processing data:", error);
+                return [];  // 에러가 발생하면 빈 배열을 반환
+            }
         };
 
+        // 데이터 처리 함수 호출
         const result = processData(rawData);
         setProcessedData(result);
-    }, []);
+    }, [rawData]); // 의존성 배열에 rawData 추가
 
     // 달력 타일 내용 설정
     const tileContent = ({ date, view }) => {
@@ -67,8 +69,7 @@ function DailyStatistics(Data) {
 
     return (
         <div className="daily-statistics">
-            <Calendar className="custom-calendar"
-                      tileContent={tileContent} />
+            <Calendar className="custom-calendar" tileContent={tileContent} />
         </div>
     );
 }

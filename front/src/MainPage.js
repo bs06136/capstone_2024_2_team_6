@@ -9,6 +9,7 @@ import LEDSwitch from './LEDSwitch';
 import axios from 'axios';
 import { Dialog } from "@mui/material";
 import DrousyAndStressSideBar from "./component/DrousyAndStressSideBar";
+import Statistics from "./Page/Statistics";
 
 const MainPage = () => {
     const uniqueNumber = localStorage.getItem("uniqueNumber");
@@ -34,13 +35,14 @@ const Logo = ({unique_Number}) => (
 const Topbar = ({ unique_Number }) => {
     const [deviceOpen, setDeviceOpen] = useState(false);
     const [userOpen, setUserOpen] = useState(false);
+    const [statisticsOpen, setStatisticsOpen] = useState(false);
 
     return (
         <div className="topbar">
             <ul>
                 <li onClick={() => setUserOpen(true)}>근무자 목록</li>
                 <li onClick={() => setDeviceOpen(true)}>장비 목록</li>
-                <li>목록 1</li>
+                <li onClick={()=> setStatisticsOpen(true)}>통계</li>
                 <li>목록 2</li>
             </ul>
             <DeviceListDialog
@@ -53,6 +55,10 @@ const Topbar = ({ unique_Number }) => {
                 onClose={() => setUserOpen(false)}
                 userList={["User1", "User2", "User3"]}
                 ID={unique_Number}
+            />
+            <Statistics
+                open={statisticsOpen}
+                onClose={()=>setStatisticsOpen(false)}
             />
         </div>
     );

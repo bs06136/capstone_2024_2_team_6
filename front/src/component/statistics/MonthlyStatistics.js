@@ -7,54 +7,62 @@ import "../../css/statistics/MontlyStatistics.css";
 function MonthlyStatistics(Data) {
     const [processedData, setProcessedData] = useState([]);
 
-    // const rawData = Data.body
+    console.log(Data);
+    console.log(Data.Data);
+    console.log(Data.Data.day);
+    //Data.body로 썼는데 왜인지???? 에러가 나서 Data.Data 하니까 에러가 사라짐...
 
-    const rawData = {
-        day: "2024-10-15,2024-10-15,2024-10-16,2024-11-19,2024-11-19,2024-11-19,2024-11-20,2024-11-20,2024-12-05,2024-12-05,2024-12-06",
-        stress: "0.4,0.5,0.6,0.1,0.2,0.3,0.5,0.5,0.3,0.4,0.2",
-        concentration: "3,3.5,4,5,4,3,2,3.5,4,4.2,3.8",
-    };
-
+    const rawData = Data.Data;
     useEffect(() => {
         const processData = (data) => {
-            const days = data.day.split(",");
-            const stressValues = data.stress.split(",").map(Number);
-            const concentrationValues = data.concentration.split(",").map(Number);
+            try {
 
-            const groupedDataByMonth = {};
+                const days = data.day;
+                const stressValues = data.stress.map(parseFloat)
+                const concentrationValues = data.concentration.map(parseFloat)
 
-            days.forEach((day, index) => {
-                const month = day.substring(0, 7); // 월을 'yyyy-mm' 형식으로 추출 (예: '2024-11')
+                console.log(stressValues);
 
-                if (!groupedDataByMonth[month]) {
-                    groupedDataByMonth[month] = { stress: [], concentration: [] };
-                }
-                groupedDataByMonth[month].stress.push(stressValues[index]);
-                groupedDataByMonth[month].concentration.push(concentrationValues[index]);
-            });
 
-            // 월별 평균 계산
-            const averagedData = Object.entries(groupedDataByMonth).map(([month, values]) => ({
-                month,
-                averageStress:
-                    values.stress.reduce((sum, val) => sum + val, 0) / values.stress.length,
-                averageConcentration:
-                    values.concentration.reduce((sum, val) => sum + val, 0) /
-                    values.concentration.length,
-            }));
+                const groupedDataByMonth = {};
 
-            return averagedData;
+                days.forEach((day, index) => {
+                    const month = day.substring(0, 7); // 월을 'yyyy-mm' 형식으로 추출 (예: '2024-11')
+
+                    if (!groupedDataByMonth[month]) {
+                        groupedDataByMonth[month] = { stress: [], concentration: [] };
+                    }
+                    groupedDataByMonth[month].stress.push(stressValues[index]);
+                    groupedDataByMonth[month].concentration.push(concentrationValues[index]);
+                });
+
+                // 월별 평균 계산
+                const averagedData = Object.entries(groupedDataByMonth).map(([month, values]) => ({
+                    month,
+                    averageStress:
+                        values.stress.reduce((sum, val) => sum + val, 0) / values.stress.length,
+                    averageConcentration:
+                        values.concentration.reduce((sum, val) => sum + val, 0) / values.concentration.length,
+                }));
+
+                return averagedData;
+            } catch (error) {
+                console.error("Error processing data:", error);
+                console.log(Data)
+                console.log(rawData);
+                return []; // 에러가 발생하면 빈 배열 반환
+            }
         };
 
+        // 데이터 처리 함수 호출
         const result = processData(rawData);
         setProcessedData(result);
-    }, []);
+    }, [rawData]); // rawData가 변경될 때마다 새로 처리
 
     // 월별 데이터가 해당 월에 맞게 표시되도록 tileContent를 설정
     const tileContent = ({ date, view }) => {
         if (view !== "year") return null; // 연간 보기에서만 표시
 
-        // 'yyyy-mm' 형식으로 월을 추출
         const formattedMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
         const dataForMonth = processedData.find((item) => item.month === formattedMonth);
 
