@@ -10,6 +10,8 @@ import config from "../config";
 import { MenuItem, Select } from "@mui/material";
 
 function UserAddOrEdit({ givenName,userId }) {
+    const ID = localStorage.getItem("uniqueNumber");
+
     const [userName, setUserName] = useState(givenName);
     const [deviceId, setDeviceId] = useState("장치번호");
     const [userDetail, setUserDetail] = useState(" ");
@@ -68,10 +70,11 @@ function UserAddOrEdit({ givenName,userId }) {
     const saveButton = async () => {
         try {
             const response = await axios.post(`${config.apiUrl}/api/POST/user/enrollment`, {
-                name: userName,
-                user_id: userId,
-                detailData: userDetail,
-                option: trackingOption
+                worker_name: userName,
+                worker_id: userId,
+                detail: userDetail,
+                option: trackingOption,
+                admin_id: ID
             });
             console.log("서버 응답:", response.data);
         } catch (error) {

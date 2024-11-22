@@ -5,11 +5,12 @@ import "../css/ListDialog.css";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from "../config";
+import Typography from "@mui/material/Typography";
 
 function DeviceListDialog({ open, onClose}) {
     const [newDevice, setNewDevice] = useState(""); // 입력된 장비 추가 ID 상태
     const [deviceList,setDeviceList] = React.useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
-
+    const ID = localStorage.getItem("uniqueNumber");
     // GET 요청
     useEffect(() => {
         // device 목록을 가져오는 비동기 함수
@@ -42,7 +43,8 @@ function DeviceListDialog({ open, onClose}) {
     const onClickAddButton = async () => {
         try {
             const response = await axios.post(`${config.apiUrl}/api/POST/device/enrollment`, {
-                DeviceID: newDevice
+                user_id: ID,
+                device_id: newDevice
             });
         }catch (error) {
             {/*일단 아무것도 안함. */}
