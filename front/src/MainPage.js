@@ -76,8 +76,8 @@ const Body = ({ unique_Number }) => {
 
                 if (response.status === 200) {
                     const parsedData = Object.entries(response.data).map(([device_id, value]) => {
-                        const [worker_id, data] = value.split(', ');
-                        return { device_id, worker_id, data };
+                        const [worker_id, focus_data, stress_data] = value.split(', ');
+                        return { device_id, worker_id, focus_data,  stress_data};
                     });
                     setDataList(parsedData);
                 }
@@ -133,12 +133,12 @@ const GroupList = () => (
 const Main = ({ dataList }) => (
     <div className="main">
         {dataList.map((item, index) => (
-            <Profile key={index} worker_id={item.worker_id} data={item.data} />
+            <Profile key={index} worker_id={item.worker_id} focus_data={item.focus_data} stress_data={item.stress_data}/>
         ))}
     </div>
 );
 
-const Profile = ({ worker_id, data }) => {
+const Profile = ({ worker_id, focus_data, stress_data }) => {
     const [userDetailPopUp, setUserDetailPopUp] = useState(false);
 
     return (
@@ -146,7 +146,8 @@ const Profile = ({ worker_id, data }) => {
             <p>{worker_id}</p>
             <div className="person">
                 <img src={defaultImage} alt="테스트" />
-                <LEDSwitch data={data} />
+                <LEDSwitch focus_data={focus_data} />
+                <LEDSwitch stress_data={stress_data} />
             </div>
             <button onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</button>
             <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>

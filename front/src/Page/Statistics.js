@@ -77,15 +77,17 @@ function Statistics({ open, onClose}) {
             const formattedEndDate = new Date(endDate).toISOString().split('T')[0];  // yyyy-mm-dd
             console.log("시작일자:", formattedStartDate);
             console.log("종료일자:", formattedEndDate);
+            console.log("ID:", ID);
 
-            // const response =await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {
-            //     params: {
-            //         worker_id: ID,
-            //         start_time: startDate,
-            //         end_time: endDate
-            //     }
-            // })
+            const response =await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {
+                params: {
+                    worker_id: "67c6a62",
+                    start_time: formattedStartDate,
+                    end_time: formattedEndDate
+                }
+            })
 
+            /*
             const response = {
                 status: "success",
                 message: "Data retrieved successfully",
@@ -99,7 +101,10 @@ function Statistics({ open, onClose}) {
                     request_time: "2024-11-22T12:00:00Z",
                     processing_time_ms: 45
                 }
-            };
+            };*/
+
+
+
             setServerResponse(response);
             console.log(serverResponse);
 
