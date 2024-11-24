@@ -88,7 +88,10 @@ const UserDetailPopup = ({userId}) => {
                     <Typography fontSize="h5">{name}</Typography>
                     <Typography fontSize="h5">{userId}</Typography>
                     <div className="details" width="100%">
-                        <Detail Data={userDetail} onChange={handleDetailChange} fieldDisable="true" />
+                        <Detail Data={userDetail}
+                                onChange={handleDetailChange}
+                                fieldDisable={true}
+                        />
                     </div>
                 </div>
             </div>

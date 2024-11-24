@@ -30,23 +30,11 @@
 .sidebar {
   flex: 0.1;
   position: relative;
-  border: 1px solid black;
   align-items: center;
   text-align: center;
   height: 700px;
   min-width: 300px;
   max-width: 300px;
-}
-  
-.grouplist {
-  align-self: center;
-}
-  
-.grouplist li {
-  border: 1px solid black;
-  margin: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
   
 .bottomButton {
@@ -69,13 +57,11 @@
   flex: 0.8;
   position: relative;
   justify-content: normal;
-  border: 1px solid black;
   text-align: center;
   height: 700px;
 }
   
 .profile {
-  border: 1px solid black;
   height: 300px;
   width: 300px;
   margin: 20px;

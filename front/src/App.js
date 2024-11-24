@@ -8,18 +8,16 @@ import MainPageWrapper from './MainPage';
 class App extends Component {
   render() {
     return (
-      <AuthProvider>
-        <BrowserRouter>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/main" element={<MainPageWrapper />} />
-              <Route path="/workers" element={<Login />} />
-              <Route path="/devices" element={<Login />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/main" element={<MainPageWrapper />} />
+            <Route path="/workers" element={<Login />} />
+            <Route path="/devices" element={<Login />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     );
   }
 }

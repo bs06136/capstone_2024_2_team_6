@@ -22,7 +22,7 @@ function Actor({ userName, imageOption }) {
             }
         };
 
-        fetchUserImage();
+        // fetchUserImage();
     }, [userName]);
 
     // 이미지 업로드 핸들러
