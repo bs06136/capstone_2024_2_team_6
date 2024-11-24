@@ -1,53 +1,72 @@
 import Button from "@mui/material/Button";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemText } from "@mui/material";
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    MenuItem,
+    Select,
+    Typography
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import "../css/ListDialog.css";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import config from "../config";
-import Typography from "@mui/material/Typography";
 
-function DeviceListDialog({ open, onClose}) {
-    const [newDevice, setNewDevice] = useState(""); // 입력된 장비 추가 ID 상태
-    const [deviceList,setDeviceList] = React.useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
+function DeviceListDialog({ open, onClose }) {
     const ID = localStorage.getItem("uniqueNumber");
-    // GET 요청
+    const [devices, setDevices] = useState([]); // 장비 목록 상태
+    const [selectedDevice, setSelectedDevice] = useState(''); // 선택된 장비 상태
+    const [newDevice, setNewDevice] = useState(''); // 새 장비 이름 상태
+
+    // 장비 목록을 가져오는 useEffect
     useEffect(() => {
-        // device 목록을 가져오는 비동기 함수
-        const getDeviceList = async () => {
+        const fetchData = async () => {
             try {
-                // 서버의 data_renew API를 호출
-                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`);
+                const response = {
+                    devices: "Device1,Device2,Device3,Device4,Device5"
+                };
+                // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-                // 서버로부터 받은 데이터가 JSON 형태일 때
-                if (response.data) {
-                    // 서버 응답에서 device 목록 추출
-                    const deviceData = response.data;
-                    const devices = Object.keys(deviceData); // JSON 객체의 key를 사용하여 device 목록 추출
-
-                    // device 목록을 상태로 설정
-                    setDeviceList(devices);
-                }
+                const deviceList = response.devices.split(',');
+                setDevices(deviceList);
             } catch (error) {
-                console.error("Error fetching device list:", error);
+                console.error('장비 목록을 가져오는 중 에러 발생:', error);
             }
         };
-    },[]);
 
-    // TextField의 입력 값을 상태에 저장
-    const handleChange = (event) => {
+        fetchData();
+    }, []);
+
+
+    // 새로운 장비 이름 입력 처리
+    const handleNewDeviceChange = (event) => {
         setNewDevice(event.target.value);
     };
 
-    // 추가 버튼 클릭 시 실행
+
     const onClickAddButton = async () => {
-        try {
-            const response = await axios.post(`${config.apiUrl}/api/POST/device/enrollment`, {
-                user_id: ID,
-                device_id: newDevice
-            });
-        }catch (error) {
-            {/*일단 아무것도 안함. */}
+        if (newDevice.trim()) {
+            try {
+                const response = await axios.post(`${config.apiUrl}/api/POST/device/enrollment`, {
+                    user_id: ID,
+                    device_id: newDevice
+                });
+
+                if (response.status === 200) {
+                    setDevices((prevDevices) => [...prevDevices, newDevice]);
+                    setNewDevice(''); // 입력 필드 초기화
+                }
+            } catch (error) {
+                console.error('장비 추가 실패:', error);
+            }
+        } else {
+            alert('장비 이름을 입력하세요');
         }
     };
 
@@ -57,23 +76,28 @@ function DeviceListDialog({ open, onClose}) {
                 <DialogTitle>장비목록</DialogTitle>
                 <DialogContent>
                     <List className="List">
-                        {deviceList.map((device, index) => (
+                        {devices.map((device, index) => (
                             <div key={index}>
                                 <ListItem>
                                     <ListItemText primary={device} />
                                 </ListItem>
-                                {index < deviceList.length - 1 && <Divider component="li" />}
+                                <Divider />
                             </div>
                         ))}
                     </List>
-                    <div className="addDevice">
-                        <TextField
-                            label="장비추가"
-                            value={newDevice}
-                            onChange={handleChange}
-                        />
-                        <Button onClick={onClickAddButton}>장비추가</Button>
-                    </div>
+
+
+                    <TextField
+                        label="장비추가"
+                        value={newDevice}
+                        onChange={handleNewDeviceChange}
+                        fullWidth
+                        sx={{ marginBottom: 2 }}
+                    />
+
+                    <Button onClick={onClickAddButton} variant="contained" color="primary">
+                        장비추가
+                    </Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="primary">닫기</Button>

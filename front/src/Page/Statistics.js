@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -10,7 +10,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
+    Grid, MenuItem, Select,
     Tab,
     Tabs
 } from "@mui/material";
@@ -52,8 +52,10 @@ function TabPanel(props) {
 function Statistics({ open, onClose}) {
     const ID = localStorage.getItem("uniqueNumber");
     const [value, setValue] = useState(0);
+    const [users, setUsers] = useState([]); // 사용자 목록 상태
+    const [selectedUser, setSelectedUser] = useState(''); // 선택된 사용자 상태
 
-    // 시작일자와 종료일자를 관리하는 상태
+
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [serverResponse, setServerResponse] = useState("");
@@ -114,6 +116,32 @@ function Statistics({ open, onClose}) {
         setServerResponse("");
     }
 
+    //사용자 목록 부르는 useEffect
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = {
+                    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
+                }
+                // const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
+
+                const userList = response.worker.split(',');
+                console.log(userList)
+                setUsers(userList);
+
+            } catch (error) {
+                console.error('데이터를 가져오는 중 에러 발생:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const UserListhandleChange = (event) => {
+        setSelectedUser(event.target.value);
+    };
+
+
     return (
         <Dialog
             open={open}
@@ -122,7 +150,19 @@ function Statistics({ open, onClose}) {
                width: "650px", maxWidth: "1000px"
             },}}
         >
-            <DialogTitle>장비목록</DialogTitle>
+            <DialogTitle>사용자 통계</DialogTitle>
+
+            <Select value={selectedUser} onChange={UserListhandleChange} fullWidth>
+                <MenuItem value="">
+                    사용자를 선택하세요
+                </MenuItem>
+                {users.map((user, index) => (
+                    <MenuItem key={index} value={user}>
+                        {user}
+                    </MenuItem>
+                ))}
+            </Select>
+
             <DialogContent>
                 <Box sx={{ padding: 2, display: "flex" }}>
                     {/* 좌측 입력 섹션 */}

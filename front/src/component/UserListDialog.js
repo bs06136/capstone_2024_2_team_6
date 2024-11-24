@@ -9,7 +9,9 @@ import config from "../config";
 function UserListDialog({ open, onClose, userList}) {
     const ID = localStorage.getItem("uniqueNumber");
     const [addUserOpen, setAddUserOpen] = useState(false);
-    const [userNames, setUserNames] = useState([]); // 사용자 이름 목록 저장
+    const [userNames, setUserNames] = useState([]);
+    const [users, setUsers] = useState([]); // 사용자 목록 상태
+
 
     // 사용자 추가 다이얼로그 열기/닫기 핸들러
     const handleAddUserOpen = () => {
@@ -21,29 +23,52 @@ function UserListDialog({ open, onClose, userList}) {
 
     console.log("UserListDialog Props: ", { open, onClose, userList, ID });
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // API 요청 보내기
+    //             const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`, {
+    //                 params: { user_id: ID },
+    //             });
+    //
+    //
+    //             // 응답 데이터 처리
+    //             const data = response.data;
+    //             const names = Object.keys(data);
+    //
+    //             console.log(data);
+    //
+    //
+    //             setUserNames(names);
+    //         } catch (error) {
+    //             console.error("데이터 가져오기 실패:", error);
+    //         }
+    //     };
+    //
+    //     if (open) {
+    //         fetchData();
+    //     }
+    // }, [open, ID]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // API 요청 보내기
-                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`, {
-                    params: { user_id: ID },
-                });
+                const response = {
+                    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
+                }
+                // const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-                // 응답 데이터 처리
-                const data = response.data;
-                const names = Object.keys(data);
+                const userList = response.worker.split(',');
+                console.log(userList)
+                setUsers(userList);
 
-
-                setUserNames(names);
             } catch (error) {
-                console.error("데이터 가져오기 실패:", error);
+                console.error('데이터를 가져오는 중 에러 발생:', error);
             }
         };
 
-        if (open) {
-            fetchData();
-        }
-    }, [open, ID]);
+        fetchData();
+    }, []);
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -51,7 +76,7 @@ function UserListDialog({ open, onClose, userList}) {
                 <DialogTitle>사용자목록</DialogTitle>
                 <DialogContent>
                     <List>
-                        {userNames.map((user, index) => (
+                        {users.map((user, index) => (
                             <div key={index}>
                                 <ListItem>
                                     <ListItemText primary={user} />

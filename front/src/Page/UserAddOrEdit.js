@@ -17,6 +17,7 @@ function UserAddOrEdit({ givenName,userId }) {
     const [userDetail, setUserDetail] = useState(" ");
     const [trackingOption, setTrackingOption] = useState("0"); // 0은 각성, 1은 졸음, 2는 수면
     const [deviceList,setDeviceList] = useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
+    const [selectedDevice, setSelectedDevice] = useState('');
 
     // GET 요청
     console.log(userId);
@@ -24,27 +25,18 @@ function UserAddOrEdit({ givenName,userId }) {
         // device 목록을 가져오는 비동기 함수
         const getDeviceList = async () => {
             try {
-                // 서버의 data_renew API를 호출
-                const response = await axios.get(`${config.apiUrl}/api/GET/data_renew`, {
-                    params: {
-                        user_id: userId
-                    }
-                });
+                const response = {
+                    devices: "Device1,Device2,Device3,Device4,Device5"
+                };
+                // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-
-                // 서버로부터 받은 데이터가 JSON 형태일 때
-                if (response.data) {
-                    // 서버 응답에서 device 목록 추출
-                    const deviceData = response.data;
-                    const devices = Object.keys(deviceData); // JSON 객체의 key를 사용하여 device 목록 추출
-
-                    // device 목록을 상태로 설정
-                    setDeviceList(devices);
-                }
+                const device = response.devices.split(',');
+                setDeviceList(device);
             } catch (error) {
-                console.error("Error fetching device list:", error);
+                console.error('장비 목록을 가져오는 중 에러 발생:', error);
             }
         };
+        getDeviceList();
 
         // 사용자 정보와 세부 데이터를 가져오는 비동기 함수
         const fetchData = async () => {
@@ -74,6 +66,7 @@ function UserAddOrEdit({ givenName,userId }) {
                 worker_id: userId,
                 detail: userDetail,
                 option: trackingOption,
+                device_Id: selectedDevice,
                 admin_id: ID
             });
             console.log("서버 응답:", response.data);
@@ -87,9 +80,11 @@ function UserAddOrEdit({ givenName,userId }) {
         setUserDetail(newDetail);
     };
 
-    const deviceSelect = (event) => {
-        setDeviceId(event.target.value);
+    const handleDeviceChange = (event) => {
+        setSelectedDevice(event.target.value); // 선택된 장비 업데이트
     };
+
+
 
     // trackingOption을 설정하는 함수
     const handleTrackingOptionChange = (option) => {
@@ -109,14 +104,16 @@ function UserAddOrEdit({ givenName,userId }) {
                     <Typography>사용자 번호 : {userId}</Typography>
                     <Typography variant="h7" margin="10px"> 장치번호 </Typography>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={userId}
-                        label="device"
-                        onChange={deviceSelect}
+                        value={selectedDevice}
+                        onChange={handleDeviceChange}
+                        fullWidth
+                        // sx={{ marginBottom: 2 }}
                     >
-                        {deviceList.map((device) => (
-                            <MenuItem key={device} value={device}>
+                        <MenuItem value="">
+                            <em>장비를 선택하세요</em>
+                        </MenuItem>
+                        {deviceList.map((device, index) => (
+                            <MenuItem key={index} value={device}>
                                 {device}
                             </MenuItem>
                         ))}
