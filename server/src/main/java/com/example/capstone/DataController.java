@@ -72,8 +72,8 @@ public class DataController {
                 stressStmt.close();
 
                 // JSON 객체에 추가
-                String value = focusScore + "," + stressScore;
-                resultJson.put(workerUserId, value);
+                String value = workerUserId + ", " + focusScore + ", " + stressScore;
+                resultJson.put(arduinoUserId, value);
             }
             System.out.println(resultJson.toString());
             matchStmt.close();
@@ -84,6 +84,7 @@ public class DataController {
             return "Error fetching data";
         }
     }
+
 
     @GetMapping("/api/GET/detail/{user_id}/info")
     public String getUserInfo(@PathVariable String user_id) {
@@ -139,7 +140,7 @@ public class DataController {
                 // 집중도와 스트레스 값을 ','로 구분하여 하나의 문자열로 저장
                 String focusScore = String.valueOf(focusRs.getFloat("focus_score"));
                 String stressScore = String.valueOf(stressRs.getFloat("stress_score"));
-                json.put("data_" + count, focusScore + "," + stressScore);
+                json.put("data_" + count, focusScore + ", " + stressScore);
                 count++;
             }
 
@@ -217,6 +218,7 @@ public class DataController {
             JsonNode rootNode = mapper.readTree(jsonData);
 
             String deviceId = rootNode.path("device_id").asText();
+            int adminId = rootNode.path("user_id").asInt(); // user_id를 int로 처리
 
             Connection connection = DatabaseManager.getConnection();
             if (connection == null) return "Database connection failed";
@@ -234,27 +236,29 @@ public class DataController {
 
             if (count > 0) {
                 // 기존 장비 정보 업데이트
-                String updateQuery = "UPDATE arduino SET device_id = ? WHERE device_id = ?";
+                String updateQuery = "UPDATE arduino SET admin_id = ? WHERE device_id = ?";
                 PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                updateStmt.setString(1, deviceId);
+                updateStmt.setInt(1, adminId); // admin_id를 int로 설정
                 updateStmt.setString(2, deviceId);
                 updateStmt.executeUpdate();
                 updateStmt.close();
-                return "true";
+                return "Device updated successfully.";
             } else {
                 // 새 장비 정보 추가
-                String insertQuery = "INSERT INTO arduino (device_id) VALUES (?)";
+                String insertQuery = "INSERT INTO arduino (device_id, admin_id) VALUES (?, ?)";
                 PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
                 insertStmt.setString(1, deviceId);
+                insertStmt.setInt(2, adminId); // admin_id를 int로 삽입
                 insertStmt.executeUpdate();
                 insertStmt.close();
-                return "true";
+                return "Device added successfully.";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "false";
+            return "Error processing device enrollment";
         }
     }
+
 
     @PostMapping("/api/POST/initial_data")
     public String receiveInitialData(@RequestBody String jsonData) {
@@ -413,9 +417,7 @@ public class DataController {
             float focusScore = calculateFocusScore(eegData); // 집중도 계산 함수 호출
             float stressScore = calculateStressScore(eegData); // 스트레스 계산 함수 호출
 
-            if (focusScore >= 0.6) {
-                recordDailyFocus(workerUserId);
-            }
+            recordDailyFocus(workerUserId, focusScore);
 
             recordDailyStress(workerUserId, stressScore);
 
@@ -494,7 +496,7 @@ public class DataController {
         }
     }
 
-    private void recordDailyFocus(String workerUserId) {
+    private void recordDailyFocus(String workerUserId, float focusScore) {
         try {
             // 데이터베이스 연결
             Connection connection = DatabaseManager.getConnection();
@@ -514,22 +516,24 @@ public class DataController {
             ResultSet resultSet = selectStmt.executeQuery();
 
             if (resultSet.next()) {
-                // 기존 데이터가 있을 경우 count 증가
-                int currentCount = resultSet.getInt("count");
-                String updateQuery = "UPDATE daily_focus SET count = ? WHERE worker_id = ? AND date = ?";
-                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                updateStmt.setInt(1, currentCount + 1);
-                updateStmt.setString(2, workerUserId);
-                updateStmt.setDate(3, currentDate);
-                updateStmt.executeUpdate();
-                updateStmt.close();
+                // 해당 날짜에 이미 기록이 있을 경우
+                if (focusScore >= 0.6) {
+                    int currentCount = resultSet.getInt("count");
+                    String updateQuery = "UPDATE daily_focus SET count = ? WHERE worker_id = ? AND date = ?";
+                    PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+                    updateStmt.setInt(1, currentCount + 1);
+                    updateStmt.setString(2, workerUserId);
+                    updateStmt.setDate(3, currentDate);
+                    updateStmt.executeUpdate();
+                    updateStmt.close();
+                }
             } else {
-                // 데이터가 없을 경우 새로운 row 삽입
+                // 해당 날짜에 기록이 없을 경우 count를 0으로 초기화
                 String insertQuery = "INSERT INTO daily_focus (worker_id, date, count) VALUES (?, ?, ?)";
                 PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
                 insertStmt.setString(1, workerUserId);
                 insertStmt.setDate(2, currentDate);
-                insertStmt.setInt(3, 1); // 첫 카운트
+                insertStmt.setInt(3, focusScore >= 0.6 ? 1 : 0); // 조건에 따라 초기 count 설정
                 insertStmt.executeUpdate();
                 insertStmt.close();
             }
@@ -660,6 +664,75 @@ public class DataController {
             return "Error fetching data for period";
         }
     }
+
+
+    @GetMapping("/api/GET/{user_id}/device_list")
+    public String getDeviceList(@PathVariable int user_id) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            if (connection == null) return "{\"error\":\"Database connection failed\"}";
+
+            // arduino 테이블에서 admin_id가 user_id와 같은 모든 device_id 조회
+            String query = "SELECT device_id FROM arduino WHERE admin_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+
+            // JSON 데이터 생성
+            StringBuilder devices = new StringBuilder();
+            while (rs.next()) {
+                if (devices.length() > 0) {
+                    devices.append(",");
+                }
+                devices.append(rs.getString("device_id"));
+            }
+
+            rs.close();
+            stmt.close();
+
+            // JSON 형식으로 반환
+            return "{\"device\":\"" + devices.toString() + "\"}";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"Error fetching device list\"}";
+        }
+    }
+
+
+    @GetMapping("/api/GET/{user_id}/worker_list")
+    public String getWorkerList(@PathVariable int user_id) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            if (connection == null) return "{\"error\":\"Database connection failed\"}";
+
+            // worker 테이블에서 admin_id가 user_id와 같은 모든 user_id 조회
+            String query = "SELECT user_id FROM worker WHERE admin_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+
+            // JSON 데이터 생성
+            StringBuilder workers = new StringBuilder();
+            while (rs.next()) {
+                if (workers.length() > 0) {
+                    workers.append(",");
+                }
+                workers.append(rs.getString("user_id"));
+            }
+
+            rs.close();
+            stmt.close();
+
+            // JSON 형식으로 반환
+            return "{\"worker\":\"" + workers.toString() + "\"}";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"Error fetching worker list\"}";
+        }
+    }
+
 
 
 }
