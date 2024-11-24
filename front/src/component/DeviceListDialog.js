@@ -33,7 +33,7 @@ function DeviceListDialog({ open, onClose }) {
                 };
                 // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-                const deviceList = response.devices.split(',');
+                const deviceList = response.data.devices.split(',');
                 setDevices(deviceList);
             } catch (error) {
                 console.error('장비 목록을 가져오는 중 에러 발생:', error);

@@ -58,7 +58,7 @@ function UserListDialog({ open, onClose, userList}) {
                 }
                 // const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-                const userList = response.worker.split(',');
+                const userList = response.data.worker.split(',');
                 console.log(userList)
                 setUsers(userList);
 

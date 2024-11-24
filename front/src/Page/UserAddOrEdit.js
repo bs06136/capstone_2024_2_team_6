@@ -108,6 +108,7 @@ function UserAddOrEdit({ givenName,userId }) {
                         onChange={handleDeviceChange}
                         fullWidth
                         // sx={{ marginBottom: 2 }}
+                        disabled="true"
                     >
                         <MenuItem value="">
                             <em>장비를 선택하세요</em>
