@@ -5,14 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/24__11__24___7_58__________.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/24__11__24___7_58__________1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LEDSwitch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/LEDSwitch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Page/Statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/Statistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/DeviceListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DeviceListDialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/StickGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/StickGraph.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/UserListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/UserListDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +42,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -178,7 +180,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="정찬혁" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

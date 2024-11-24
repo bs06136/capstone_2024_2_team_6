@@ -125,12 +125,13 @@ function Statistics({ open, onClose}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = {
-                    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
-                }
-                // const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
+                //const response = {
+                //    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
+                //}
+                const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/worker_list`);
+                console.log("statisticsresponse",response);
 
-                const userList = response.worker.split(',');
+                const userList = response.data.worker.split(',');
                 console.log(userList)
                 setUsers(userList);
 
@@ -253,14 +254,13 @@ function Statistics({ open, onClose}) {
                             <Tab label="그래프" {...a11yProps(2)} />
                         </Tabs>
                         <TabPanel value={value} index={0}>
-                            <DailyStatistics Data={serverResponse.body}/>
+                            <DailyStatistics Data={serverResponse.data}/>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            <MonthlyStatistics Data={serverResponse.body}/>
+                            <MonthlyStatistics Data={serverResponse.data}/>
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                            그래프
-                            <StatisticsGraph Data={serverResponse.body}/>
+                            <StatisticsGraph Data={serverResponse.data}/>
                         </TabPanel>
                     </Box>
                 </Box>

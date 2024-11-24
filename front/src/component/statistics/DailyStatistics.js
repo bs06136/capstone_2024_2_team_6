@@ -12,10 +12,12 @@ function DailyStatistics(Data) {
         const processData = (data) => {
             try {
 
+                console.log(data);
+
                 // 데이터 처리
-                const days = data.day
-                const stressValues = data.stress.map(parseFloat);
-                const concentrationValues = data.concentration.map(parseFloat);
+                const days = data.day.split(",");
+                const stressValues = data.stress.split(",").map(parseFloat);
+                const concentrationValues = data.concentration.split(",").map(parseFloat);
 
                 const groupedData = {};
                 days.forEach((day, index) => {

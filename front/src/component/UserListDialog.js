@@ -53,10 +53,12 @@ function UserListDialog({ open, onClose, userList}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = {
-                    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
-                }
-                // const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
+                //const response = {
+                //    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
+                //}
+                const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/worker_list`);
+
+                console.log("userlistresponse",response);
 
                 const userList = response.data.worker.split(',');
                 console.log(userList)
