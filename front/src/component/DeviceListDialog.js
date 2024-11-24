@@ -32,7 +32,7 @@ function DeviceListDialog({ open, onClose }) {
                     devices: "Device1,Device2,Device3,Device4,Device5"
                 };
                 // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
-
+                consloe.log(response)
                 const deviceList = response.data.devices.split(',');
                 setDevices(deviceList);
             } catch (error) {

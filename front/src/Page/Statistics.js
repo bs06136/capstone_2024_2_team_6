@@ -248,14 +248,14 @@ function Statistics({ open, onClose}) {
                             <Tab label="그래프" {...a11yProps(2)} />
                         </Tabs>
                         <TabPanel value={value} index={0}>
-                            <DailyStatistics Data={serverResponse.body}/>
+                            <DailyStatistics Data={serverResponse.data}/>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            <MonthlyStatistics Data={serverResponse.body}/>
+                            <MonthlyStatistics Data={serverResponse.data}/>
                         </TabPanel>
                         <TabPanel value={value} index={2}>
                             그래프
-                            <StatisticsGraph Data={serverResponse.body}/>
+                            <StatisticsGraph Data={serverResponse.data}/>
                         </TabPanel>
                     </Box>
                 </Box>

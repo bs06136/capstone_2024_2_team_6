@@ -13,6 +13,7 @@ function DailyStatistics(Data) {
             try {
 
                 // 데이터 처리
+                console.log(data)
                 const days = data.day
                 const stressValues = data.stress.map(parseFloat);
                 const concentrationValues = data.concentration.map(parseFloat);

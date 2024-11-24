@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Actor from "../component/Actor";
 import Detail from "../component/Detail";
 import Button from "@mui/material/Button";
@@ -9,15 +9,16 @@ import TextField from "@mui/material/TextField";
 import config from "../config";
 import { MenuItem, Select } from "@mui/material";
 
-function UserAddOrEdit({ givenName,userId }) {
+function UserAddOrEdit({ givenName, userId }) {
     const ID = localStorage.getItem("uniqueNumber");
 
     const [userName, setUserName] = useState(givenName);
     const [deviceId, setDeviceId] = useState("장치번호");
     const [userDetail, setUserDetail] = useState(" ");
     const [trackingOption, setTrackingOption] = useState("0"); // 0은 각성, 1은 졸음, 2는 수면
-    const [deviceList,setDeviceList] = useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
+    const [deviceList, setDeviceList] = useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
     const [selectedDevice, setSelectedDevice] = useState('');
+    const [inputUserId, setInputUserId] = useState(userId);  // 사용자 번호를 입력받을 상태 추가
 
     // GET 요청
     console.log(userId);
@@ -63,7 +64,7 @@ function UserAddOrEdit({ givenName,userId }) {
         try {
             const response = await axios.post(`${config.apiUrl}/api/POST/user/enrollment`, {
                 worker_name: userName,
-                worker_id: userId,
+                worker_id: inputUserId,  // 입력된 사용자 번호를 전달
                 detail: userDetail,
                 option: trackingOption,
                 device_Id: selectedDevice,
@@ -84,8 +85,6 @@ function UserAddOrEdit({ givenName,userId }) {
         setSelectedDevice(event.target.value); // 선택된 장비 업데이트
     };
 
-
-
     // trackingOption을 설정하는 함수
     const handleTrackingOptionChange = (option) => {
         setTrackingOption(option);
@@ -96,12 +95,18 @@ function UserAddOrEdit({ givenName,userId }) {
             <div className="UserImage">
                 <Actor imageOption="true" />
                 <div className="text">
-                    <Typography variant="h7" margin="10px"> 이름 </Typography>
                     <TextField
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
+                        label={"이름"}
                     />
-                    <Typography>사용자 번호 : {userId}</Typography>
+                    <br/>
+                    <TextField
+                        value={inputUserId}
+                        onChange={(e) => setInputUserId(e.target.value)} // 사용자 번호 입력 변경
+                        label="사용자번호"
+                    />
+
                     <Typography variant="h7" margin="10px"> 장치번호 </Typography>
                     <Select
                         value={selectedDevice}
