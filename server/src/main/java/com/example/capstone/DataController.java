@@ -16,6 +16,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Map;
+
 @RestController
 public class DataController {
 
@@ -462,7 +469,7 @@ public class DataController {
             for (int i = 9; i <= 13 && i < eegValues.length; i++) {
                 alpha += eegValues[i];
             }
-            for (int i = 14; i < eegValues.length; i++) {
+            for (int i = 14; i <= 30 && i < eegValues.length; i++) {
                 beta += eegValues[i];
             }
 
@@ -484,7 +491,7 @@ public class DataController {
             for (int i = 9; i <= 13 && i < eegValues.length; i++) {
                 alpha += eegValues[i];
             }
-            for (int i = 14; i < eegValues.length; i++) {
+            for (int i = 14; i <= 30 && i < eegValues.length; i++) {
                 beta += eegValues[i];
             }
 
@@ -517,7 +524,7 @@ public class DataController {
 
             if (resultSet.next()) {
                 // 해당 날짜에 이미 기록이 있을 경우
-                if (focusScore >= 0.6) {
+                if (focusScore >= 0.8) {
                     int currentCount = resultSet.getInt("count");
                     String updateQuery = "UPDATE daily_focus SET count = ? WHERE worker_id = ? AND date = ?";
                     PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
@@ -733,6 +740,39 @@ public class DataController {
         }
     }
 
+    @GetMapping("/api/GET/detail/{worker_id}/name")
+    public ResponseEntity<Map<String, String>> getWorkerName(@PathVariable String worker_id) {
+        try {
+            // 데이터베이스 연결
+            Connection connection = DatabaseManager.getConnection();
+            if (connection == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Database connection failed"));
+            }
+
+            // worker 테이블에서 worker_id에 해당하는 이름 조회
+            String query = "SELECT name FROM worker WHERE user_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, worker_id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // 이름 가져오기
+                String workerName = rs.getString("name");
+                rs.close();
+                stmt.close();
+                return ResponseEntity.ok(Map.of("name", workerName));
+            } else {
+                // 해당 worker_id가 없는 경우
+                rs.close();
+                stmt.close();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Worker not found"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Database error"));
+        }
+    }
 
 
 }
