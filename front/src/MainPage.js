@@ -141,7 +141,7 @@ const Main = ({ dataList }) => (
 
 const Profile = ({ worker_id, focus_data, stress_data }) => {
     const [userDetailPopUp, setUserDetailPopUp] = useState(false);
-    const [name, setName] =""
+    const [name, setName] =useState(" ")
     useEffect(() => {
         const getName = async () => {
             try {
