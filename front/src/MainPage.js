@@ -10,6 +10,7 @@ import axios from 'axios';
 import { Dialog } from "@mui/material";
 import DrousyAndStressSideBar from "./component/DrousyAndStressSideBar";
 import Statistics from "./Page/Statistics";
+import config from "./config";
 
 const MainPage = () => {
     const uniqueNumber = localStorage.getItem("uniqueNumber");
@@ -76,8 +77,8 @@ const Body = ({ unique_Number }) => {
 
                 if (response.status === 200) {
                     const parsedData = Object.entries(response.data).map(([device_id, value]) => {
-                        const [worker_id, data] = value.split(', ');
-                        return { device_id, worker_id, data };
+                        const [worker_id, focus_data, stress_data] = value.split(', ');
+                        return { device_id, worker_id, focus_data,  stress_data};
                     });
                     setDataList(parsedData);
                 }
@@ -133,20 +134,35 @@ const GroupList = () => (
 const Main = ({ dataList }) => (
     <div className="main">
         {dataList.map((item, index) => (
-            <Profile key={index} worker_id={item.worker_id} data={item.data} />
+            <Profile key={index} worker_id={item.worker_id} focus_data={item.focus_data} stress_data={item.stress_data}/>
         ))}
     </div>
 );
 
-const Profile = ({ worker_id, data }) => {
+const Profile = ({ worker_id, focus_data, stress_data }) => {
     const [userDetailPopUp, setUserDetailPopUp] = useState(false);
+    const [name, setName] =""
+    useEffect(() => {
+        const getName = async () => {
+            try {
+                const response = await axios.get(`${config.apiUrl}/api/GET/detail/${worker_id}/name`);
+                const name = response.data.name;
+                setName(name);
+            } catch (error) {
+                console.error("Error fetching name:", error);
+            }
+        };
+
+        getName(); // 호출
+    }, [worker_id]); // worker_id가 변경될 때마다 실행
 
     return (
         <div className="profile">
-            <p>{worker_id}</p>
+            <p>{name}</p>
             <div className="person">
                 <img src={defaultImage} alt="테스트" />
-                <LEDSwitch data={data} />
+                <LEDSwitch focus_data={focus_data} />
+                <LEDSwitch stress_data={stress_data} />
             </div>
             <button onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</button>
             <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>

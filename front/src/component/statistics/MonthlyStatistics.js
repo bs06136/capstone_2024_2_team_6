@@ -10,24 +10,30 @@ function MonthlyStatistics(Data) {
     console.log(Data);
     console.log(Data.Data);
     console.log(Data.Data.day);
-    //Data.body로 썼는데 왜인지???? 에러가 나서 Data.Data 하니까 에러가 사라짐...
 
     const rawData = Data.Data;
+
     useEffect(() => {
         const processData = (data) => {
             try {
+                // 날짜를 하루씩 뒤로 미루는 함수
+                const addOneDay = (dateStr) => {
+                    const date = new Date(dateStr);
+                    date.setDate(date.getDate()); // 하루 추가
+                    return date.toISOString().split("T")[0]; // yyyy-mm-dd 형식으로 변환
+                };
 
-                const days = data.day;
-                const stressValues = data.stress.map(parseFloat)
-                const concentrationValues = data.concentration.map(parseFloat)
+                // 날짜 데이터를 하루씩 뒤로 미룬 배열 생성
+                const days = data.day.split(",").map(addOneDay);
+                const stressValues = data.stress.split(",").map(parseFloat);
+                const concentrationValues = data.concentration.split(",").map(parseFloat);
 
                 console.log(stressValues);
-
 
                 const groupedDataByMonth = {};
 
                 days.forEach((day, index) => {
-                    const month = day.substring(0, 7); // 월을 'yyyy-mm' 형식으로 추출 (예: '2024-11')
+                    const month = day.substring(0, 7); // 월을 'yyyy-mm' 형식으로 추출
 
                     if (!groupedDataByMonth[month]) {
                         groupedDataByMonth[month] = { stress: [], concentration: [] };
@@ -48,7 +54,7 @@ function MonthlyStatistics(Data) {
                 return averagedData;
             } catch (error) {
                 console.error("Error processing data:", error);
-                console.log(Data)
+                console.log(Data);
                 console.log(rawData);
                 return []; // 에러가 발생하면 빈 배열 반환
             }

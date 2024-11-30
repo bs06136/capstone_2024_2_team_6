@@ -20,6 +20,7 @@ const UserDetailPopup = ({userId}) => {
     const getUserInfo = async () => {
         try
         {
+            console.log("Fetching user info for userId:", userId);
             const response =
                 await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/info`);
 
@@ -30,6 +31,12 @@ const UserDetailPopup = ({userId}) => {
         catch (error) {
             //donothing
         }
+    }
+    const getName = async () => {
+        const response = await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/name`)
+        const name = response.data.name;
+
+        setName(name);
     }
 
     // 다이얼로그 열기
@@ -55,6 +62,7 @@ const UserDetailPopup = ({userId}) => {
 
     useEffect( () => {
             getUserInfo();
+            getName()
     }, [])
 
     return (

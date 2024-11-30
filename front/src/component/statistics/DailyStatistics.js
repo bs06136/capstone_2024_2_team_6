@@ -5,18 +5,25 @@ import React, { useState, useEffect } from "react";
 import "../../css/statistics/DailyStatistics.css";
 
 function DailyStatistics(Data) {
+    console.log("Daily");
+    console.log(Data);
     const [processedData, setProcessedData] = useState([]);
-    const rawData = Data.Data;
 
+    const rawData = Data.Data
     useEffect(() => {
         const processData = (data) => {
             try {
+                // 날짜를 하루씩 뒤로 밀기 위한 함수
+                const addOneDay = (dateStr) => {
+                    const date = new Date(dateStr);
+                    date.setDate(date.getDate() -1); // 하루를 더함
+                    return date.toISOString().split("T")[0]; // yyyy-mm-dd 형식으로 변환
+                };
 
                 // 데이터 처리
-                console.log(data)
-                const days = data.day
-                const stressValues = data.stress.map(parseFloat);
-                const concentrationValues = data.concentration.map(parseFloat);
+                const days = data.day.split(",").map(addOneDay); // 날짜를 하루씩 밀기
+                const stressValues = data.stress.split(",").map(parseFloat);
+                const concentrationValues = data.concentration.split(",").map(parseFloat);
 
                 const groupedData = {};
                 days.forEach((day, index) => {
@@ -40,7 +47,7 @@ function DailyStatistics(Data) {
                 return averagedData;
             } catch (error) {
                 console.error("Error processing data:", error);
-                return [];  // 에러가 발생하면 빈 배열을 반환
+                return []; // 에러가 발생하면 빈 배열 반환
             }
         };
 

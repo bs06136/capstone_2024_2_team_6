@@ -28,12 +28,14 @@ function DeviceListDialog({ open, onClose }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = {
-                    devices: "Device1,Device2,Device3,Device4,Device5"
-                };
-                // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
-                consloe.log(response)
-                const deviceList = response.data.devices.split(',');
+                //const response = {
+                //    devices: "Device1,Device2,Device3,Device4,Device5"
+                //};
+                const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
+
+                console.log("deviselistresponse",response);
+
+                const deviceList = response.data.device.split(',');
                 setDevices(deviceList);
             } catch (error) {
                 console.error('장비 목록을 가져오는 중 에러 발생:', error);

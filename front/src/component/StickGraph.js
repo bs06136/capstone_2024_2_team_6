@@ -20,8 +20,8 @@ function StickGraph({ user_Id }) {
 
     const requestGet = async () => {
         try {
-            // const response = await axios.get(`${config.apiUrl}/api/GET/detail/${user_Id}/data`);
-
+            const response = await axios.get(`${config.apiUrl}/api/GET/detail/${user_Id}/data`);
+            /*
             const response = {
                 status: 200,
                 statusText: "OK",
@@ -40,7 +40,7 @@ function StickGraph({ user_Id }) {
                     "data_9": "5.0,2.9",
                     "data_10": "5.0,2.9"
                 },
-            }; //이거 지우고 위에 get 살렸을때 되는지 확인해야함.
+            }; //이거 지우고 위에 get 살렸을때 되는지 확인해야함.*/
 
             console.log("Server Response:", response.data);
 

@@ -20,10 +20,14 @@ function StatisticsGraph(Data) {
 
     useEffect(() => {
         try {
+
+            console.log(rawData);
+
+
             // rawData를 파싱하여 processedData 형식으로 변환
-            const days = rawData.day
-            const stressValues = rawData.stress.map(parseFloat);
-            const concentrationValues = rawData.concentration.map(parseFloat);
+            const days = rawData.day.split(",");
+            const stressValues = rawData.stress.split(",").map(parseFloat);
+            const concentrationValues = rawData.concentration.split(",").map(parseFloat);
 
             const uniqueDates = [...new Set(days)];
 
