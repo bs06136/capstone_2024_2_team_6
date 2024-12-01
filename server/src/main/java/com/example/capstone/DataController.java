@@ -462,19 +462,21 @@ public class DataController {
             ObjectMapper objectMapper = new ObjectMapper();
             float[] eegValues = objectMapper.readValue(eegData, float[].class);
 
-            float theta = 0, alpha = 0, beta = 0;
-            for (int i = 5; i <= 8 && i < eegValues.length; i++) {
+            float theta = 0.0f, alpha = 0.0f, beta = 0.0f;
+            for (int i = 5; i <= 8; i++) {
                 theta += eegValues[i];
             }
-            for (int i = 9; i <= 13 && i < eegValues.length; i++) {
+            for (int i = 8; i <= 13; i++) {
                 alpha += eegValues[i];
             }
-            for (int i = 14; i <= 30 && i < eegValues.length; i++) {
+            for (int i = 14; i < 30 ; i++) {
                 beta += eegValues[i];
             }
 
             if (beta == 0) return 0.0f; // 나눗셈 오류 방지
-            return (theta + alpha) / beta;
+            System.out.println(eegValues.length);
+            System.out.println((alpha) / beta);
+            return (alpha) / beta;
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0f;

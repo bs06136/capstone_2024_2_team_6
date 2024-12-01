@@ -143,6 +143,7 @@ const Profile = ({ worker_id, focus_data, stress_data }) => {
     const [userDetailPopUp, setUserDetailPopUp] = useState(false);
     const [name, setName] =useState(" ")
     useEffect(() => {
+        // getName 함수 정의
         const getName = async () => {
             try {
                 const response = await axios.get(`${config.apiUrl}/api/GET/detail/${worker_id}/name`);
@@ -153,8 +154,15 @@ const Profile = ({ worker_id, focus_data, stress_data }) => {
             }
         };
 
-        getName(); // 호출
-    }, [worker_id]); // worker_id가 변경될 때마다 실행
+        // 5초마다 getName을 호출하도록 설정 (예: 5000ms = 5초)
+        const intervalId = setInterval(() => {
+            getName();
+        }, 500);
+
+        // 컴포넌트가 언마운트되거나 worker_id가 변경될 때마다 interval을 clear
+        return () => clearInterval(intervalId);
+
+    }, [worker_id]); // worker_id가 변경될 때마다 호출
 
     return (
         <div className="profile">

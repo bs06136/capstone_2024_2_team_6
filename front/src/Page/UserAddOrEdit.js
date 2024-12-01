@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import config from "../config";
-import { MenuItem, Select } from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 function UserAddOrEdit({ givenName, userId }) {
     const ID = localStorage.getItem("uniqueNumber");
@@ -16,7 +16,7 @@ function UserAddOrEdit({ givenName, userId }) {
     const [deviceId, setDeviceId] = useState("장치번호");
     const [userDetail, setUserDetail] = useState(" ");
     const [trackingOption, setTrackingOption] = useState("0"); // 0은 각성, 1은 졸음, 2는 수면
-    const [deviceList, setDeviceList] = useState(["Loading", "Loading", "Loading"]); //이것도 수정해야됨. Main 화면으로부터 받아오거나 GET을 추가해야됨.
+    const [deviceList, setDeviceList] = useState(["Loading", "Loading", "Loading"]);
     const [selectedDevice, setSelectedDevice] = useState('');
     const [inputUserId, setInputUserId] = useState(userId);  // 사용자 번호를 입력받을 상태 추가
 
@@ -26,12 +26,9 @@ function UserAddOrEdit({ givenName, userId }) {
         // device 목록을 가져오는 비동기 함수
         const getDeviceList = async () => {
             try {
-                const response = {
-                    devices: "Device1,Device2,Device3,Device4,Device5"
-                };
-                // 실제 API 호출: const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
+                const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/device_list`);
 
-                const device = response.devices.split(',');
+                const device = response.data.device.split(',');
                 setDeviceList(device);
             } catch (error) {
                 console.error('장비 목록을 가져오는 중 에러 발생:', error);
@@ -95,6 +92,7 @@ function UserAddOrEdit({ givenName, userId }) {
             <div className="UserImage">
                 <Actor imageOption="true" />
                 <div className="text">
+                    <br/>
                     <TextField
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
@@ -106,24 +104,27 @@ function UserAddOrEdit({ givenName, userId }) {
                         onChange={(e) => setInputUserId(e.target.value)} // 사용자 번호 입력 변경
                         label="사용자번호"
                     />
-
-                    <Typography variant="h7" margin="10px"> 장치번호 </Typography>
-                    <Select
-                        value={selectedDevice}
-                        onChange={handleDeviceChange}
-                        fullWidth
-                        // sx={{ marginBottom: 2 }}
-                        disabled="true"
-                    >
-                        <MenuItem value="">
-                            <em>장비를 선택하세요</em>
-                        </MenuItem>
-                        {deviceList.map((device, index) => (
-                            <MenuItem key={index} value={device}>
-                                {device}
+                    <br/>
+                    <FormControl fullWidth>
+                        <InputLabel id="device-select-label">장치번호</InputLabel>
+                        <Select
+                            labelId="device-select-label"
+                            value={selectedDevice}
+                            onChange={handleDeviceChange}
+                            fullWidth
+                            disabled={false}  // 비활성화 여부를 동적으로 설정할 수 있습니다.
+                            label="Select Device"
+                        >
+                            <MenuItem value="">
+                                <em>장비를 선택하세요</em>
                             </MenuItem>
-                        ))}
-                    </Select>
+                            {deviceList.map((device, index) => (
+                                <MenuItem key={index} value={device}>
+                                    {device}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
             </div>
 

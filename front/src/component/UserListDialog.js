@@ -53,16 +53,29 @@ function UserListDialog({ open, onClose, userList}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                //const response = {
-                //    worker: "Alice,Bob,Charlie,David,Eve,Frank,Grace,Heidi"
-                //}
                 const response = await axios.get(`${config.apiUrl}/api/GET/${ID}/worker_list`);
+                console.log("userlistresponse", response);
 
-                console.log("userlistresponse",response);
-
+                // userList는 사용자 ID들의 리스트
                 const userList = response.data.worker.split(',');
-                console.log(userList)
-                setUsers(userList);
+                console.log(userList);
+
+                // userList에서 각 사용자 ID에 대해 이름을 가져오는 비동기 작업을 병렬로 처리
+                const names = await Promise.all(
+                    userList.map(async (worker_id) => {
+                        try {
+                            const nameResponse = await axios.get(`${config.apiUrl}/api/GET/detail/${worker_id}/name`);
+                            return nameResponse.data.name; // 이름만 반환
+                        } catch (error) {
+                            console.error(`Error fetching name for ${worker_id}:`, error);
+                            return 'Unknown'; // 오류 시 기본값 'Unknown'
+                        }
+                    })
+                );
+
+                // 이름만 저장
+                setUserNames(names);
+                setUsers(userList); // userList는 worker ID만 저장
 
             } catch (error) {
                 console.error('데이터를 가져오는 중 에러 발생:', error);
@@ -70,7 +83,7 @@ function UserListDialog({ open, onClose, userList}) {
         };
 
         fetchData();
-    }, []);
+    }, [ID]);
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -78,7 +91,7 @@ function UserListDialog({ open, onClose, userList}) {
                 <DialogTitle>사용자목록</DialogTitle>
                 <DialogContent>
                     <List>
-                        {users.map((user, index) => (
+                        {userNames.map((user, index) => (
                             <div key={index}>
                                 <ListItem>
                                     <ListItemText primary={user} />

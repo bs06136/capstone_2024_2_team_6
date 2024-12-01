@@ -142,6 +142,7 @@ public class SampleDataHandler {
             if (beta == 0) return 0.0f;
 
             // 집중도 = (세타 + 알파) / 베타
+            System.out.println((theta + alpha) / beta);
             return (theta + alpha) / beta;
 
         } catch (Exception e) {
