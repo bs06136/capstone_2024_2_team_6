@@ -20,6 +20,7 @@ const UserDetailPopup = ({userId}) => {
     const getUserInfo = async () => {
         try
         {
+            console.log("Fetching user info for userId:", userId);
             const response =
                 await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/info`);
 
@@ -80,7 +81,7 @@ const UserDetailPopup = ({userId}) => {
                 <div className="actor-section">
                     <div className="actor"><Actor/></div>
                     <div className="user-status">
-                        <Button variant="outlined">{option}</Button>
+                        <Button variant="outlined" sx={{ mt: 1 }}>{option}</Button>
                     </div>
                 </div>
 

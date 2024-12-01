@@ -92,7 +92,7 @@ function Login() {
   };
 
   if (isLoggedIn) {
-    localStorage.setItem("uniqueNumber", unique_number);
+    localStorage.setItem("unique_Number", unique_number);
     return <Navigate to="/main" />;
   }
 

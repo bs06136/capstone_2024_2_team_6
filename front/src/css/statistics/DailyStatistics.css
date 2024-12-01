@@ -1,0 +1,52 @@
+/* Calendar 전체 크기 조정 */
+.custom-calendar {
+    width: 80%; /* 캘린더 가로 크기 */
+    max-width: 900px; /* 최대 크기 설정 */
+    margin: auto;
+    font-size: 1.2rem; /* 텍스트 크기 조정 */
+}
+
+/* 달력 타일 스타일 */
+.react-calendar__tile {
+    height: 100px; /* 타일 높이 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 날짜를 상단 정렬 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    padding: 5px;
+    position: relative;
+}
+
+
+
+/* 날짜 텍스트 스타일 */
+.react-calendar__tile {
+    position: absolute;
+    top: 5px; /* 상단 여백 */
+    left: 5px; /* 왼쪽 여백 */
+    font-size: 1rem; /* 날짜 크기 */
+    font-weight: bold;
+}
+
+/* 스트레스와 집중도 표시 */
+.daily-statistics .tile-content {
+    margin-top: 20px; /* 위쪽에 마진 추가 */
+    margin-bottom: 5px; /* 아래쪽 마진 추가 */
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* 왼쪽 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+}
+
+.stress {
+    color: red;
+    font-size: 0.8rem;
+    margin: 2px 0; /* 위아래 여백 */
+}
+
+.concentration {
+    color: blue;
+    font-size: 0.8rem;
+    margin: 2px 0; /* 위아래 여백 */
+}
+

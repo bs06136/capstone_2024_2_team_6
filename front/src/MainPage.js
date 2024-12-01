@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './MainPage.css';
 import defaultImage from './images/default_profile.png';
 import DeviceListDialog from './component/DeviceListDialog';
@@ -9,10 +8,17 @@ import LEDSwitch from './LEDSwitch';
 import axios from 'axios';
 import { Dialog } from "@mui/material";
 import DrousyAndStressSideBar from "./component/DrousyAndStressSideBar";
+import Statistics from "./Page/Statistics";
 import config from './config';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
+import Bedtime from '@mui/icons-material/Bedtime';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   boxShadow:
@@ -24,103 +30,117 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const MainPage = () => {
-    const uniqueNumber = localStorage.getItem("uniqueNumber");
-    console.log(uniqueNumber);
-    return (
-        <div className="Main">
-            <Logo unique_Number={uniqueNumber}/>
-            <hr />
-            <Body unique_Number={uniqueNumber} />
-        </div>
-    )
+  const unique_Number = localStorage.getItem("unique_Number");
+  console.log(unique_Number);
+  return (
+    <div className="Main">
+      <TopAppBar unique_Number={ unique_Number } />
+      <Body unique_Number={unique_Number} />
+    </div>
+  );
 };
 
-const Logo = ({unique_Number}) => (
-    <div className="logo">
-        <h1>
-            <Link to="/">캡스톤디자인 6팀</Link>
-        </h1>
-        <Topbar unique_Number={unique_Number}/>
-    </div>
-);
+const TopAppBar = ({ unique_Number }) => {
+  const [deviceOpen, setDeviceOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+  const [statisticsOpen, setStatisticsOpen] = useState(false);
 
-const Topbar = ({ unique_Number }) => {
-    const [deviceOpen, setDeviceOpen] = useState(false);
-    const [userOpen, setUserOpen] = useState(false);
-
-    return (
-        <div className="topbar">
-            <ul>
-                <li onClick={() => setUserOpen(true)}>근무자 목록</li>
-                <li onClick={() => setDeviceOpen(true)}>장비 목록</li>
-                <li>목록 1</li>
-                <li>목록 2</li>
-            </ul>
-            <DeviceListDialog
-                open={deviceOpen}
-                onClose={() => setDeviceOpen(false)}
-                ID={unique_Number}
-            />
-            <UserListDialog
-                open={userOpen}
-                onClose={() => setUserOpen(false)}
-                userList={["User1", "User2", "User3"]}
-                ID={unique_Number}
-            />
-        </div>
-    );
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='static'>
+        <Toolbar>
+          <Bedtime sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}></Bedtime>
+          <Typography variant="h5" component="div" sx={{
+              mr: 2,
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}>
+            캡스톤디자인 6팀
+          </Typography>
+          <ButtonGroup variant='contained' color='inherit' size='large' sx={{ mr: 2.3, backgroundColor: 'white', color: 'black' }}>
+            <Button onClick={() => setUserOpen(true)}>
+              근무자 목록
+            </Button>
+            <Button onClick={() => setDeviceOpen(true)}>
+              장비 목록
+            </Button>
+            <Button onClick={()=> setStatisticsOpen(true)}>
+              통계
+            </Button>
+          </ButtonGroup>
+        </Toolbar>
+      </AppBar>
+      <DeviceListDialog
+        open={deviceOpen}
+        onClose={() => setDeviceOpen(false)}
+        ID={unique_Number}
+      />
+      <UserListDialog
+        open={userOpen}
+        onClose={() => setUserOpen(false)}
+        userList={["User1", "User2", "User3"]}
+        ID={unique_Number}
+      />
+      <Statistics
+        open={statisticsOpen}
+        onClose={()=>setStatisticsOpen(false)}
+      />
+    </Box>
+  );
 };
 
 const Body = ({ unique_Number }) => {
-    const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(config.apiUrl + '/api/GET/data_renew', {
-                    params: { user_id: unique_Number },
-                });
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await axios.get(config.apiUrl + '/api/GET/data_renew', {
+                  params: { user_id: unique_Number },
+              });
 
-                if (response.status === 200) {
-                    const parsedData = Object.entries(response.data).map(([device_id, value]) => {
-                        const [worker_id, data] = value.split(', ');
-                        return { device_id, worker_id, data };
-                    });
-                    setDataList(parsedData);
-                }
-            } catch (error) {
-                console.error("데이터 가져오기 오류", error);
-            }
-        };
+              if (response.status === 200) {
+                  const parsedData = Object.entries(response.data).map(([device_id, value]) => {
+                      const [worker_id, focus_data, stress_data] = value.split(', ');
+                      return { device_id, worker_id, focus_data,  stress_data};
+                  });
+                  setDataList(parsedData);
+              }
+          } catch (error) {
+              console.error("데이터 가져오기 오류", error);
+          }
+      };
 
-        fetchData();
-        const interval = setInterval(fetchData, 5000000);
-        return () => clearInterval(interval);
-    }, [unique_Number]);
+      fetchData();
+      const interval = setInterval(fetchData, 50000000);
+      return () => clearInterval(interval);
+  }, [unique_Number]);
 
-    return (
-        <div className="body">
-            <Sidebar unique_Number={unique_Number}/>
-            <Main dataList={dataList} />
-        </div>
-    );
+  return (
+      <div className="body">
+          <Sidebar unique_Number={unique_Number}/>
+          <Main dataList={dataList} />
+      </div>
+  );
 };
 
-const Sidebar = (unique_Number) => (
+const Sidebar = ({ unique_Number }) => (
     <div className="sidebar">
         <div style={{height:"100%", margin: "auto" }}>
-          <Card variant="outlined" sx={{ minHeight: '700px' }}>
-            <DrousyAndStressSideBar ID={unique_Number}/>
-          </Card>
+          <DrousyAndStressSideBar ID={unique_Number}/>
         </div>
     </div>
 );
 
 const Main = ({ dataList }) => (
     <div className="main">
-      <Card variant="outlined" sx={{ minHeight: '700px' }}>
+      <Card variant='outlined' sx={{ display: "flex", height: "100%", width: "100%"}}>
         {dataList.map((item, index) => (
-          <Profile key={index} worker_id={item.worker_id} data={item.data} />
+          <Profile key={index} worker_id={item.worker_id} focus_data={item.focus_data} stress_data={item.stress_data}/>
         ))}
       </Card>
     </div>
@@ -137,7 +157,7 @@ const Profile = ({ worker_id, data }) => {
               <img src={defaultImage} alt="테스트" />
               <LEDSwitch data={data} />
             </div>
-            <Button onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</Button>
+            <Button variant="outlined" onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</Button>
             <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>
               <UserDetailPopup userId={worker_id} />
             </Dialog>

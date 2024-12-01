@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { AuthProvider } from './Login';
 import Login from './Login';
 import MainPageWrapper from './MainPage';
 
