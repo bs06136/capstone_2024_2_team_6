@@ -54,9 +54,17 @@ const UserDetailPopup = ({userId}) => {
         setUserDetail(newDetail);
     };
 
+    /*
     useEffect( () => {
             getUserInfo();
     }, [])
+*/
+    useEffect(() => {
+        const fetchData = async () => {
+            await getUserInfo();
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="popup">
@@ -79,7 +87,13 @@ const UserDetailPopup = ({userId}) => {
 
             <div className="upper-part">
                 <div className="actor-section">
-                    <div className="actor"><Actor/></div>
+                    {name !== "로딩중" ? (
+                        <div className="actor">
+                            <Actor userName={name}/> {/* userName을 props로 전달 */}
+                        </div>
+                    ) : (
+                        <div>Loading...</div> // 로딩 중 메시지
+                    )}
                     <div className="user-status">
                         <Button variant="outlined">{option}</Button>
                     </div>

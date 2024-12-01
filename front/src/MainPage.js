@@ -145,10 +145,30 @@ const Profile = ({ worker_id, focus_data, stress_data }) => {
         <div className="profile">
             <p>{worker_id}</p>
             <div className="person">
-                <img src={defaultImage} alt="테스트" />
-                <LEDSwitch focus_data={focus_data} />
-                <LEDSwitch stress_data={stress_data} />
+                {/* 동적 이미지 로드 */}
+                <img
+                    src={`./images/${worker_id}.png`}
+                    alt={`${worker_id} 이미지`}
+                    onError={(e) => (e.target.src = defaultImage)} // 이미지가 없으면 기본 이미지 출력
+
+                    style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                    }}
+                />
+                {/* Focus와 Stress 데이터 */}
+                <div>
+                    <p>Focus Data: {parseFloat(focus_data).toFixed(5)}</p>
+                    <LEDSwitch data={focus_data} />
+                </div>
+                <div>
+                    <p>Stress Data: {parseFloat(stress_data).toFixed(5)}</p>
+                    <LEDSwitch data={stress_data} />
+                </div>
             </div>
+            {/* 상세 정보 확인 버튼 */}
             <button onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</button>
             <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>
                 <UserDetailPopup userId={worker_id} />
