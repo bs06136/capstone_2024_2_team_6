@@ -81,29 +81,11 @@ function Statistics({ open, onClose}) {
 
             const response =await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {
                 params: {
-                    worker_id: "67c6a62",
+                    worker_id: selectedUser,
                     start_time: formattedStartDate,
                     end_time: formattedEndDate
                 }
             })
-
-            /*
-            const response = {
-                status: "success",
-                message: "Data retrieved successfully",
-                body: {
-                    day: ["2024-10-15", "2024-10-15", "2024-10-16", "2024-11-19", "2024-11-19", "2024-11-19", "2024-11-20", "2024-11-20", "2024-12-05", "2024-12-05", "2024-12-06"],
-                    stress: ["0.4", "0.5", "0.6", "0.1", "0.2", "0.3", "0.5", "0.5", "0.3", "0.4", "0.2"],
-                    concentration: ["3", "3.5", "4", "5", "4", "3", "2", "3.5", "4", "4.2", "3.8"]
-                },
-                metadata: {
-                    total_entries: 11,
-                    request_time: "2024-11-22T12:00:00Z",
-                    processing_time_ms: 45
-                }
-            };*/
-
-
 
             setServerResponse(response);
             console.log(serverResponse);

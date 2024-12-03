@@ -9,11 +9,12 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation"; // Annotation 플러그인 임포트
 import "../css/DrousyAndStressSideBar.css";
 import axios from "axios";
 
 // Chart.js 등록
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
 
 function DrousyAndStressSideBar() {
     const uniqueNumber = localStorage.getItem("uniqueNumber");
@@ -77,6 +78,22 @@ function DrousyAndStressSideBar() {
         responsive: true, // 반응형 그래프
         maintainAspectRatio: false, // 비율 유지 안 함
         plugins: {
+            annotation: {
+                annotations: { // 수정된 부분
+                    line1: {
+                        type: "line",
+                        xMin: 0.5,  //졸음 기준을 몇으로 잡을것인가?
+                        xMax: 0.5,  //위랑 맞춰야됨. 다르면 대각선
+                        borderColor: "red",
+                        borderWidth: 2,
+                        label: {
+                            content: "Baseline",
+                            enabled: true,
+                            position: 0.6,
+                        },
+                    },
+                },
+            },
             legend: {
                 position: "top",
             },

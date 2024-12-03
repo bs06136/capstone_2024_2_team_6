@@ -474,7 +474,6 @@ public class DataController {
             }
 
             if (beta == 0) return 0.0f; // 나눗셈 오류 방지
-            System.out.println(eegValues.length);
             System.out.println((alpha) / beta);
             return (alpha) / beta;
         } catch (Exception e) {

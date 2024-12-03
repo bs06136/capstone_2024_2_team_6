@@ -5,11 +5,11 @@ from scipy.signal.windows import hamming
 import matplotlib.pyplot as plt
 
 # CSV 파일 읽기
-file_path = r"D:\캡스톤 디자인(1)\capstone_2024_2_team_6\EEG Data\테스트 측정 데이터\24.10.31\눈감음아침\recorded_data_2024-10-31_09-45-31.csv"  # 파일 경로 수정
+file_path = r"D:\캡스톤 디자인(1)\뇌파를이용한어쩌구\EEG Data\테스트 측정 데이터\24.11.02\취침\recorded_data_2024-11-02_09-27-56.csv"  # 파일 경로 수정
 data = pd.read_csv(file_path)  # 헤더가 있음
 
 # counter 값 선택
-counter = data['channel_1'].values[0:2048]
+counter = data['channel_1'].values[14000:18000]
 
 # 샘플링 주파수 설정
 fs = 256.0

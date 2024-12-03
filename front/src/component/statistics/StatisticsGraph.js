@@ -15,6 +15,7 @@ ChartJS.register(
 
 function StatisticsGraph(Data) {
     const rawData = Data.Data;
+    console.log(rawData)
 
     const [processedData, setProcessedData] = useState({ labels: [], stressData: [], concentrationData: [] });
 

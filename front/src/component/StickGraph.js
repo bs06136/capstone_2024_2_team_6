@@ -21,26 +21,6 @@ function StickGraph({ user_Id }) {
     const requestGet = async () => {
         try {
             const response = await axios.get(`${config.apiUrl}/api/GET/detail/${user_Id}/data`);
-            /*
-            const response = {
-                status: 200,
-                statusText: "OK",
-                headers: {},
-                config: {},
-                request: {},
-                data: {
-                    "data_1": "3.5,2.7",
-                    "data_2": "4.2,3.1",
-                    "data_3": "5.0,2.9",
-                    "data_4": "5.0,2.9",
-                    "data_5": "5.0,2.9",
-                    "data_6": "5.0,2.9",
-                    "data_7": "5.0,2.9",
-                    "data_8": "5.0,2.9",
-                    "data_9": "5.0,2.9",
-                    "data_10": "5.0,2.9"
-                },
-            }; //이거 지우고 위에 get 살렸을때 되는지 확인해야함.*/
 
             console.log("Server Response:", response.data);
 
@@ -93,10 +73,32 @@ function StickGraph({ user_Id }) {
         ],
     };
 
+    // 플러그인 정의
+    const plugins = [
+        {
+            id: 'horizontalLine',
+            beforeDraw: (chart) => {
+                const { ctx, scales: { y } } = chart;
+
+                // y 축에서 0.5의 픽셀 위치 계산
+                const yValue = y.getPixelForValue(0.5);
+
+                ctx.save();
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(chart.chartArea.left, yValue);
+                ctx.lineTo(chart.chartArea.right, yValue);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    ];
+
     return (
         <div>
             {focusData.length > 0 && stressData.length > 0 ? (
-                <Bar data={data} />
+                <Bar data={data} options={{ responsive: true }} plugins={plugins} />
             ) : (
                 <p>데이터를 불러오는 중입니다...</p>
             )}

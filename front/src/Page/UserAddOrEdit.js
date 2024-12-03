@@ -44,7 +44,7 @@ function UserAddOrEdit({ givenName, userId }) {
                 // 서버에서 받은 사용자 정보를 상태로 설정
                 setUserName(response.data["name"]);
                 setDeviceId(response.data["deviceId"]);
-                setUserDetail("\n" + response.data["detail"]);
+                setUserDetail(response.data["detail"]);
             } catch (error) {
                 console.error("데이터를 가져오는 중 오류 발생:", error);
             }
@@ -105,26 +105,6 @@ function UserAddOrEdit({ givenName, userId }) {
                         label="사용자번호"
                     />
                     <br/>
-                    <FormControl fullWidth>
-                        <InputLabel id="device-select-label">장치번호</InputLabel>
-                        <Select
-                            labelId="device-select-label"
-                            value={selectedDevice}
-                            onChange={handleDeviceChange}
-                            fullWidth
-                            disabled={false}  // 비활성화 여부를 동적으로 설정할 수 있습니다.
-                            label="Select Device"
-                        >
-                            <MenuItem value="">
-                                <em>장비를 선택하세요</em>
-                            </MenuItem>
-                            {deviceList.map((device, index) => (
-                                <MenuItem key={index} value={device}>
-                                    {device}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
                 </div>
             </div>
 
