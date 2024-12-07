@@ -5,38 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="이미지 출력 추가">
-      <change afterPath="$PROJECT_DIR$/public/images/49e08652.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/a1a52a4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/daniel.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/luis.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/49e08652.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/a1a52a4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/daniel.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/luis.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/24__11__24___7_58__________1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LEDSwitch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/LEDSwitch.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Page/Statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/Statistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Page/UserAddOrEdit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserAddOrEdit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Actor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Actor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/DeviceListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DeviceListDialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/DrousyAndStressSideBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DrousyAndStressSideBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/StickGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/StickGraph.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/UserListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/UserListDialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/css/DrousyAndStressSideBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/DrousyAndStressSideBar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/css/Statistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/Statistics.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/css/statistics/DailyStatistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/statistics/DailyStatistics.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/css/statistics/MontlyStatistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/statistics/MontlyStatistics.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,12 +44,12 @@
     &quot;assignee&quot;: &quot;bs06136&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/bs06136/capstone_2024_2_team_6.git&quot;,
-    &quot;accountId&quot;: &quot;19414d80-3fdc-49ca-a2f4-defa4f3d6a56&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/bs06136/capstone_2024_2_team_6",
+    "accountId": "19414d80-3fdc-49ca-a2f4-defa4f3d6a56"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -87,36 +58,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Jest.App.test.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;정찬혁&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.18.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.16.11&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/정찬혁/front/src/images&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/front/node_modules/react-scripts&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Jest.App.test.js.executor": "Run",
+    "Node.js.App.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "git-widget-placeholder": "taehyeon",
+    "go.import.settings.migrated": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "20.18.0",
+    "javascript.nodejs.core.library.typings.version": "20.16.11",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/정찬혁/front/src/images",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/front/node_modules/react-scripts",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "모듈",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "settings.nodejs",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\bszxc\IdeaProjects\capstone_2024_2_team_6\정찬혁\front\src\images" />
@@ -231,6 +202,7 @@
       <workItem from="1733319556569" duration="3898000" />
       <workItem from="1733387919543" duration="7473000" />
       <workItem from="1733568598971" duration="74000" />
+      <workItem from="1733573448992" duration="2639000" />
     </task>
     <task id="LOCAL-00001" summary="오류 수정">
       <option name="closed" value="true" />

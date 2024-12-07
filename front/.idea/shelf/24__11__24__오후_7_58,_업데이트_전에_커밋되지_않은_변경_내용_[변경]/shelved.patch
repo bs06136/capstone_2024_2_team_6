@@ -1,0 +1,323 @@
+Index: src/Page/Statistics.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from \"react\";\r\nimport Button from \"@mui/material/Button\";\r\nimport TextField from \"@mui/material/TextField\";\r\nimport Typography from \"@mui/material/Typography\";\r\nimport {\r\n    Box,\r\n    Card,\r\n    CardContent,\r\n    Dialog,\r\n    DialogActions,\r\n    DialogContent,\r\n    DialogTitle,\r\n    Grid,\r\n    Tab,\r\n    Tabs\r\n} from \"@mui/material\";\r\nimport DailyStatistics from \"../component/statistics/DailyStatistics\";\r\nimport MonthlyStatistics from \"../component/statistics/MonthlyStatistics\";\r\nimport StatisticsGraph from \"../component/statistics/StatisticsGraph\";\r\nimport axios from \"axios\";\r\nimport config from \"../config\";\r\n\r\n// a11yProps 함수: 탭에 접근성 속성을 추가하는 함수\r\nfunction a11yProps(index) {\r\n    return {\r\n        id: `vertical-tab-${index}`,\r\n        \"aria-controls\": `vertical-tabpanel-${index}`,\r\n    };\r\n}\r\n\r\n// TabPanel 컴포넌트: 각 탭의 내용을 렌더링\r\nfunction TabPanel(props) {\r\n    const { children, value, index, ...other } = props;\r\n\r\n    return (\r\n        <div\r\n            role=\"tabpanel\"\r\n            hidden={value !== index}\r\n            id={`vertical-tabpanel-${index}`}\r\n            aria-labelledby={`vertical-tab-${index}`}\r\n            {...other}\r\n        >\r\n            {value === index && (\r\n                <Box sx={{ padding: 2 }}>\r\n                    {children}\r\n                </Box>\r\n            )}\r\n        </div>\r\n    );\r\n}\r\n\r\nfunction Statistics({ open, onClose}) {\r\n    const ID = localStorage.getItem(\"uniqueNumber\");\r\n    const [value, setValue] = useState(0);\r\n\r\n    // 시작일자와 종료일자를 관리하는 상태\r\n    const [startDate, setStartDate] = useState(\"\");\r\n    const [endDate, setEndDate] = useState(\"\");\r\n    const [serverResponse, setServerResponse] = useState(\"\");\r\n\r\n    // 입력 필드 값 변화 처리 함수\r\n    const handleStartDateChange = (e) => {\r\n        setStartDate(e.target.value);\r\n    };\r\n\r\n    const handleEndDateChange = (e) => {\r\n        setEndDate(e.target.value);\r\n    };\r\n\r\n    // 입력 버튼 클릭 시 실행되는 함수\r\n    const handleSubmit = async () => {\r\n        // 시작일자와 종료일자가 비어있는지 체크\r\n        if (startDate && endDate) {\r\n            const formattedStartDate = new Date(startDate).toISOString().split('T')[0];  // yyyy-mm-dd\r\n            const formattedEndDate = new Date(endDate).toISOString().split('T')[0];  // yyyy-mm-dd\r\n            console.log(\"시작일자:\", formattedStartDate);\r\n            console.log(\"종료일자:\", formattedEndDate);\r\n            console.log(\"ID:\", ID);\r\n\r\n            const response =await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {\r\n                params: {\r\n                    worker_id: \"67c6a62\",\r\n                    start_time: formattedStartDate,\r\n                    end_time: formattedEndDate\r\n                }\r\n            })\r\n\r\n            /*\r\n            const response = {\r\n                status: \"success\",\r\n                message: \"Data retrieved successfully\",\r\n                body: {\r\n                    day: [\"2024-10-15\", \"2024-10-15\", \"2024-10-16\", \"2024-11-19\", \"2024-11-19\", \"2024-11-19\", \"2024-11-20\", \"2024-11-20\", \"2024-12-05\", \"2024-12-05\", \"2024-12-06\"],\r\n                    stress: [\"0.4\", \"0.5\", \"0.6\", \"0.1\", \"0.2\", \"0.3\", \"0.5\", \"0.5\", \"0.3\", \"0.4\", \"0.2\"],\r\n                    concentration: [\"3\", \"3.5\", \"4\", \"5\", \"4\", \"3\", \"2\", \"3.5\", \"4\", \"4.2\", \"3.8\"]\r\n                },\r\n                metadata: {\r\n                    total_entries: 11,\r\n                    request_time: \"2024-11-22T12:00:00Z\",\r\n                    processing_time_ms: 45\r\n                }\r\n            };*/\r\n\r\n\r\n\r\n            setServerResponse(response);\r\n            console.log(serverResponse);\r\n\r\n        } else {\r\n            alert(\"시작일자와 종료일자를 모두 입력해주세요.\");\r\n        }\r\n    };\r\n\r\n    // 탭 변화 처리 함수\r\n    const handleChange = (event, newValue) => {\r\n        setValue(newValue);\r\n    };\r\n    const 리셋 = () => {\r\n        setServerResponse(\"\");\r\n    }\r\n\r\n    return (\r\n        <Dialog\r\n            open={open}\r\n            onClose={onClose}\r\n            sx={{\"& .MuiDialog-paper\": {\r\n               width: \"650px\", maxWidth: \"1000px\"\r\n            },}}\r\n        >\r\n            <DialogTitle>장비목록</DialogTitle>\r\n            <DialogContent>\r\n                <Box sx={{ padding: 2, display: \"flex\" }}>\r\n                    {/* 좌측 입력 섹션 */}\r\n                    <Box>\r\n                        <Grid container spacing={1} justifyContent=\"center\">\r\n                            {/* 시작일자 */}\r\n                            <Grid item>\r\n                                <Card variant=\"outlined\" sx={{ minWidth: 150, padding: 1 }}>\r\n                                    <CardContent>\r\n                                        <Typography variant=\"h6\" sx={{ marginBottom: 1 }}>\r\n                                            시작일자\r\n                                        </Typography>\r\n                                        <TextField\r\n                                            variant=\"outlined\"\r\n                                            margin=\"normal\"\r\n                                            size=\"small\"\r\n                                            sx={{ width: 200 }}\r\n                                            value={startDate}\r\n                                            onChange={handleStartDateChange}\r\n                                            type=\"date\" // HTML5의 date input 사용\r\n                                        />\r\n                                    </CardContent>\r\n                                </Card>\r\n                            </Grid>\r\n\r\n                            {/* 종료일자 */}\r\n                            <Grid item>\r\n                                <Card variant=\"outlined\" sx={{ minWidth: 150, padding: 1 }}>\r\n                                    <CardContent>\r\n                                        <Typography variant=\"h6\" sx={{ marginBottom: 1 }}>\r\n                                            종료일자\r\n                                        </Typography>\r\n                                        <TextField\r\n                                            variant=\"outlined\"\r\n                                            margin=\"normal\"\r\n                                            size=\"small\"\r\n                                            sx={{ width: 200 }}\r\n                                            value={endDate}\r\n                                            onChange={handleEndDateChange}\r\n                                            type=\"date\" // HTML5의 date input 사용\r\n                                        />\r\n                                    </CardContent>\r\n                                </Card>\r\n                            </Grid>\r\n                        </Grid>\r\n\r\n                        {/* 입력 및 리셋 버튼 */}\r\n                        <Box sx={{ display: \"flex\", justifyContent: \"center\", marginTop: 2, gap: 2 }}>\r\n                            <Button\r\n                                variant=\"contained\"\r\n                                color=\"primary\"\r\n                                sx={{ padding: \"8px 16px\", borderRadius: 20, fontSize: 14 }}\r\n                                onClick={handleSubmit}\r\n                            >\r\n                                입력\r\n                            </Button>\r\n                            <Button\r\n                                variant=\"outlined\"\r\n                                color=\"secondary\"\r\n                                sx={{ padding: \"8px 16px\", borderRadius: 20, fontSize: 14 }}\r\n                                onClick={리셋}\r\n                            >\r\n                                리셋\r\n                            </Button>\r\n                        </Box>\r\n\r\n                        <br />\r\n                        <Tabs\r\n                            orientation=\"horizontal\"\r\n                            variant=\"scrollable\"\r\n                            value={value}\r\n                            onChange={handleChange}\r\n                            aria-label=\"horizontal tabs\"\r\n                            sx={{\r\n                                border: \"1px solid\",\r\n                                borderRadius: \"10px\",\r\n                                borderRight: 1,\r\n                                borderColor: \"divider\",\r\n                            }}\r\n                        >\r\n                            <Tab label=\"일별 통계\" {...a11yProps(0)} />\r\n                            <Tab label=\"월별 통계\" {...a11yProps(1)} />\r\n                            <Tab label=\"그래프\" {...a11yProps(2)} />\r\n                        </Tabs>\r\n                        <TabPanel value={value} index={0}>\r\n                            <DailyStatistics Data={serverResponse.body}/>\r\n                        </TabPanel>\r\n                        <TabPanel value={value} index={1}>\r\n                            <MonthlyStatistics Data={serverResponse.body}/>\r\n                        </TabPanel>\r\n                        <TabPanel value={value} index={2}>\r\n                            그래프\r\n                            <StatisticsGraph Data={serverResponse.body}/>\r\n                        </TabPanel>\r\n                    </Box>\r\n                </Box>\r\n            </DialogContent>\r\n            <DialogActions>\r\n                <Button onClick={onClose} color=\"primary\">닫기</Button>\r\n            </DialogActions>\r\n        </Dialog>\r\n    );\r\n}\r\n\r\nexport default Statistics;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Page/Statistics.js b/src/Page/Statistics.js
+--- a/src/Page/Statistics.js	(revision 5aaed13dee344ebe32e3a50507867fa042c6951c)
++++ b/src/Page/Statistics.js	(date 1732445743046)
+@@ -1,8 +1,8 @@
+-import React, { useState } from "react";
+-import Button from "@mui/material/Button";
+-import TextField from "@mui/material/TextField";
+-import Typography from "@mui/material/Typography";
++import React, { useState, useEffect } from "react";
+ import {
++    Button,
++    TextField,
++    Typography,
+     Box,
+     Card,
+     CardContent,
+@@ -12,7 +12,9 @@
+     DialogTitle,
+     Grid,
+     Tab,
+-    Tabs
++    Tabs,
++    Select,
++    MenuItem
+ } from "@mui/material";
+ import DailyStatistics from "../component/statistics/DailyStatistics";
+ import MonthlyStatistics from "../component/statistics/MonthlyStatistics";
+@@ -49,25 +51,45 @@
+     );
+ }
+ 
+-function Statistics({ open, onClose}) {
+-    const ID = localStorage.getItem("uniqueNumber");
++function Statistics({ open, onClose }) {
++    const adminId = localStorage.getItem("uniqueNumber");
+     const [value, setValue] = useState(0);
+ 
+-    // 시작일자와 종료일자를 관리하는 상태
++    // 상태 관리
+     const [startDate, setStartDate] = useState("");
+     const [endDate, setEndDate] = useState("");
+-    const [serverResponse, setServerResponse] = useState("");
++    const [workerList, setWorkerList] = useState([]); // 근무자 목록
++    const [selectedWorker, setSelectedWorker] = useState(""); // 선택된 근무자 ID
++    const [serverResponse, setServerResponse] = useState({ body: { day: [], stress: [], concentration: [] } }); // 서버 응답
+ 
+-    // 입력 필드 값 변화 처리 함수
+-    const handleStartDateChange = (e) => {
+-        setStartDate(e.target.value);
+-    };
++    // 근무자 목록 가져오기
++    useEffect(() => {
++        const fetchWorkerList = async () => {
++            try {
++                const response = await axios.get(`${config.apiUrl}/api/GET/${adminId}/worker_list`);
++                if (response.data.worker) {
++                    const workers = response.data.worker.split(","); // 콤마로 분리된 목록
++                    setWorkerList(workers);
++                }
++            } catch (error) {
++                console.error("Error fetching worker list:", error);
++            }
++        };
++        fetchWorkerList();
++    }, [adminId]);
++
++    // 시작일자 및 종료일자 변경 핸들러
++    const handleStartDateChange = (e) => setStartDate(e.target.value);
++    const handleEndDateChange = (e) => setEndDate(e.target.value);
+ 
+-    const handleEndDateChange = (e) => {
+-        setEndDate(e.target.value);
+-    };
++    // 근무자 선택 핸들러
++    const handleWorkerSelect = (e) => setSelectedWorker(e.target.value);
++
++    useEffect(() => {
++        console.log("Updated Server Response After State Change:", serverResponse);
++    }, [serverResponse]);
+ 
+-    // 입력 버튼 클릭 시 실행되는 함수
++    // 데이터 요청 핸들러
+     const handleSubmit = async () => {
+         // 시작일자와 종료일자가 비어있는지 체크
+         if (startDate && endDate) {
+@@ -75,63 +97,88 @@
+             const formattedEndDate = new Date(endDate).toISOString().split('T')[0];  // yyyy-mm-dd
+             console.log("시작일자:", formattedStartDate);
+             console.log("종료일자:", formattedEndDate);
+-            console.log("ID:", ID);
++            console.log("선택된 근무자 ID:", selectedWorker);
+ 
+-            const response =await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {
+-                params: {
+-                    worker_id: "67c6a62",
+-                    start_time: formattedStartDate,
+-                    end_time: formattedEndDate
+-                }
+-            })
++            try {
++                const response = await axios.get(`${config.apiUrl}/api/GET/detail/data_period`, {
++                    params: {
++                        worker_id: selectedWorker,
++                        start_time: formattedStartDate,
++                        end_time: formattedEndDate
++                    }
++                });
+ 
+-            /*
+-            const response = {
+-                status: "success",
+-                message: "Data retrieved successfully",
+-                body: {
+-                    day: ["2024-10-15", "2024-10-15", "2024-10-16", "2024-11-19", "2024-11-19", "2024-11-19", "2024-11-20", "2024-11-20", "2024-12-05", "2024-12-05", "2024-12-06"],
+-                    stress: ["0.4", "0.5", "0.6", "0.1", "0.2", "0.3", "0.5", "0.5", "0.3", "0.4", "0.2"],
+-                    concentration: ["3", "3.5", "4", "5", "4", "3", "2", "3.5", "4", "4.2", "3.8"]
+-                },
+-                metadata: {
+-                    total_entries: 11,
+-                    request_time: "2024-11-22T12:00:00Z",
+-                    processing_time_ms: 45
+-                }
+-            };*/
++                console.log("서버 응답 데이터:", response.data); // 받은 데이터를 로그로 출력
++
++
++                const formattedResponse = {
++                    day: Array.isArray(response.data.day) ? response.data.day : [response.data.day],
++                    stress: Array.isArray(response.data.stress) ? response.data.stress : [response.data.stress],
++                    concentration: Array.isArray(response.data.concentration)
++                        ? response.data.concentration
++                        : [response.data.concentration],
++                };
+ 
++                console.log("Formatted Response:", formattedResponse);
+ 
++                setServerResponse({ body: formattedResponse });
+ 
+-            setServerResponse(response);
+-            console.log(serverResponse);
+ 
++            } catch (error) {
++                console.error("데이터 요청 중 오류 발생:", error); // 에러 로그 출력
++            }
+         } else {
+             alert("시작일자와 종료일자를 모두 입력해주세요.");
+         }
+     };
+ 
++
+     // 탭 변화 처리 함수
+     const handleChange = (event, newValue) => {
+         setValue(newValue);
+     };
+-    const 리셋 = () => {
++
++    // 서버 응답 초기화
++    const handleReset = () => {
+         setServerResponse("");
+-    }
++    };
+ 
+     return (
+         <Dialog
+             open={open}
+             onClose={onClose}
+-            sx={{"& .MuiDialog-paper": {
+-               width: "650px", maxWidth: "1000px"
+-            },}}
++            sx={{
++                "& .MuiDialog-paper": {
++                    width: "650px", maxWidth: "1000px"
++                },
++            }}
+         >
+-            <DialogTitle>장비목록</DialogTitle>
++            <DialogTitle>근무자 데이터 조회</DialogTitle>
+             <DialogContent>
+                 <Box sx={{ padding: 2, display: "flex" }}>
+                     {/* 좌측 입력 섹션 */}
+                     <Box>
++                        {/* 근무자 선택 */}
++                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
++                            근무자 선택
++                        </Typography>
++                        <Select
++                            value={selectedWorker}
++                            onChange={handleWorkerSelect}
++                            displayEmpty
++                            fullWidth
++                            sx={{ marginBottom: 2 }}
++                        >
++                            <MenuItem value="" disabled>
++                                근무자를 선택해주세요
++                            </MenuItem>
++                            {workerList.map((worker) => (
++                                <MenuItem key={worker} value={worker}>
++                                    {worker}
++                                </MenuItem>
++                            ))}
++                        </Select>
++
+                         <Grid container spacing={1} justifyContent="center">
+                             {/* 시작일자 */}
+                             <Grid item>
+@@ -188,13 +235,12 @@
+                                 variant="outlined"
+                                 color="secondary"
+                                 sx={{ padding: "8px 16px", borderRadius: 20, fontSize: 14 }}
+-                                onClick={리셋}
++                                onClick={handleReset}
+                             >
+                                 리셋
+                             </Button>
+                         </Box>
+ 
+-                        <br />
+                         <Tabs
+                             orientation="horizontal"
+                             variant="scrollable"
+@@ -204,8 +250,8 @@
+                             sx={{
+                                 border: "1px solid",
+                                 borderRadius: "10px",
+-                                borderRight: 1,
+                                 borderColor: "divider",
++                                marginTop: 3
+                             }}
+                         >
+                             <Tab label="일별 통계" {...a11yProps(0)} />
+@@ -213,20 +259,21 @@
+                             <Tab label="그래프" {...a11yProps(2)} />
+                         </Tabs>
+                         <TabPanel value={value} index={0}>
+-                            <DailyStatistics Data={serverResponse.body}/>
++                            <DailyStatistics Data={serverResponse.body} />
+                         </TabPanel>
+                         <TabPanel value={value} index={1}>
+-                            <MonthlyStatistics Data={serverResponse.body}/>
++                            <MonthlyStatistics Data={serverResponse.body} />
+                         </TabPanel>
+                         <TabPanel value={value} index={2}>
+-                            그래프
+-                            <StatisticsGraph Data={serverResponse.body}/>
++                            <StatisticsGraph Data={serverResponse.body} />
+                         </TabPanel>
+                     </Box>
+                 </Box>
+             </DialogContent>
+             <DialogActions>
+-                <Button onClick={onClose} color="primary">닫기</Button>
++                <Button onClick={onClose} color="primary">
++                    닫기
++                </Button>
+             </DialogActions>
+         </Dialog>
+     );
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"162722c8-2520-4dac-967c-0ee82228f826\" name=\"변경\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/LEDSwitch.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/LEDSwitch.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/MainPage.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/MainPage.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Page/Statistics.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Page/Statistics.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Page/UserDetailPopup.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Page/UserDetailPopup.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/component/DeviceListDialog.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/component/DeviceListDialog.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/component/StickGraph.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/component/StickGraph.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/component/UserListDialog.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/component/UserListDialog.js\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JavaScript File\" />\r\n        <option value=\"CSS File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;bs06136&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/bs06136/capstone_2024_2_team_6.git&quot;,\r\n    &quot;accountId&quot;: &quot;19414d80-3fdc-49ca-a2f4-defa4f3d6a56&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2nWBquvG8tw79RPKV6WF4ZSDCjW\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Jest.App.test.js.executor&quot;: &quot;Run&quot;,\r\n    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;정찬혁&quot;,\r\n    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.18.0&quot;,\r\n    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.16.11&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/정찬혁/front&quot;,\r\n    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/front/node_modules/react-scripts&quot;,\r\n    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,\r\n    &quot;ts.external.directory.path&quot;: &quot;C:\\\\Program Files\\\\JetBrains\\\\IntelliJ IDEA 2024.2.3\\\\plugins\\\\javascript-plugin\\\\jsLanguageServicesImpl\\\\external&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration default=\"true\" type=\"GoApplicationRunConfiguration\" factoryName=\"Go Application\">\r\n      <module name=\"front\" />\r\n      <working_directory value=\"$PROJECT_DIR$\" />\r\n      <go_parameters value=\"-i\" />\r\n      <kind value=\"FILE\" />\r\n      <directory value=\"$PROJECT_DIR$\" />\r\n      <filePath value=\"$PROJECT_DIR$\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"GoTestRunConfiguration\" factoryName=\"Go Test\">\r\n      <module name=\"front\" />\r\n      <working_directory value=\"$PROJECT_DIR$\" />\r\n      <go_parameters value=\"-i\" />\r\n      <kind value=\"DIRECTORY\" />\r\n      <directory value=\"$PROJECT_DIR$\" />\r\n      <filePath value=\"$PROJECT_DIR$\" />\r\n      <framework value=\"gotest\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"GoApplicationRunConfiguration\" factoryName=\"Go Application\">\r\n      <module name=\"front\" />\r\n      <working_directory value=\"$PROJECT_DIR$\" />\r\n      <go_parameters value=\"-i\" />\r\n      <kind value=\"FILE\" />\r\n      <directory value=\"$PROJECT_DIR$\" />\r\n      <filePath value=\"$PROJECT_DIR$\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"GoTestRunConfiguration\" factoryName=\"Go Test\">\r\n      <module name=\"front\" />\r\n      <working_directory value=\"$PROJECT_DIR$\" />\r\n      <go_parameters value=\"-i\" />\r\n      <kind value=\"DIRECTORY\" />\r\n      <directory value=\"$PROJECT_DIR$\" />\r\n      <filePath value=\"$PROJECT_DIR$\" />\r\n      <framework value=\"gotest\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\r\n      <changelist id=\"162722c8-2520-4dac-967c-0ee82228f826\" name=\"변경\" comment=\"\" />\r\n      <created>1729079145873</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1729079145873</updated>\r\n      <workItem from=\"1729079146931\" duration=\"176000\" />\r\n      <workItem from=\"1729079339093\" duration=\"106000\" />\r\n      <workItem from=\"1729079459612\" duration=\"12942000\" />\r\n      <workItem from=\"1730379099772\" duration=\"62000\" />\r\n      <workItem from=\"1730379167631\" duration=\"84000\" />\r\n      <workItem from=\"1730379259270\" duration=\"95000\" />\r\n      <workItem from=\"1730379359442\" duration=\"75000\" />\r\n      <workItem from=\"1730379446481\" duration=\"196000\" />\r\n      <workItem from=\"1730379778404\" duration=\"4459000\" />\r\n      <workItem from=\"1730436470430\" duration=\"604000\" />\r\n      <workItem from=\"1730446196142\" duration=\"348000\" />\r\n      <workItem from=\"1730457673206\" duration=\"597000\" />\r\n      <workItem from=\"1730789397024\" duration=\"690000\" />\r\n      <workItem from=\"1731490076240\" duration=\"6225000\" />\r\n      <workItem from=\"1732315990124\" duration=\"2351000\" />\r\n      <workItem from=\"1732318396461\" duration=\"59000\" />\r\n      <workItem from=\"1732319765560\" duration=\"608000\" />\r\n      <workItem from=\"1732349922537\" duration=\"19000\" />\r\n      <workItem from=\"1732353144662\" duration=\"8036000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VgoProject\">\r\n    <settings-migrated>true</settings-migrated>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5aaed13dee344ebe32e3a50507867fa042c6951c)
++++ b/.idea/workspace.xml	(date 1732445792855)
+@@ -4,15 +4,10 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="">
++    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment=".">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/LEDSwitch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/LEDSwitch.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.js" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/Page/Statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/Statistics.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/component/DeviceListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DeviceListDialog.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/component/StickGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/StickGraph.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/component/UserListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/UserListDialog.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -166,8 +161,18 @@
+       <workItem from="1732318396461" duration="59000" />
+       <workItem from="1732319765560" duration="608000" />
+       <workItem from="1732349922537" duration="19000" />
+-      <workItem from="1732353144662" duration="8036000" />
++      <workItem from="1732353144662" duration="9253000" />
++      <workItem from="1732441946714" duration="3812000" />
++    </task>
++    <task id="LOCAL-00001" summary=".">
++      <option name="closed" value="true" />
++      <created>1732361391921</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1732361391921</updated>
+     </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -183,6 +188,10 @@
+         </entry>
+       </map>
+     </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="." />
++    <option name="LAST_COMMIT_MESSAGE" value="." />
+   </component>
+   <component name="VgoProject">
+     <settings-migrated>true</settings-migrated>

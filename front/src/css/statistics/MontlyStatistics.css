@@ -1,0 +1,81 @@
+/* 달력 크기 및 배치 */
+.react-calendar {
+    width: 90%; /* 캘린더 가로 크기 90% */
+    max-width: 1000px; /* 최대 크기 1000px */
+    margin: auto;
+    font-size: 1.4rem; /* 폰트 크기 */
+}
+
+/* 달력 타일 스타일 */
+.react-calendar__tile {
+    height: 100px; /* 타일 높이 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 날짜를 상단 정렬 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    padding: 5px;
+    position: relative;
+
+}
+
+/* 날짜 텍스트 스타일 */
+.react-calendar__tile abbr {
+    position: absolute;
+    top: 5px; /* 상단 여백 */
+    left: 5px; /* 왼쪽 여백 */
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* 월별 통계 텍스트 영역 */
+.monthly-statistics-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+}
+
+.month {
+    font-weight: bold;
+}
+
+.stress {
+    color: red;
+}
+
+.concentration {
+    color: blue;
+}
+
+.year-view-title {
+    margin-top: 20px;
+    font-size: 1.5rem;
+}
+
+/* 스트레스와 집중도 표시 */
+.tile-content {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%; /* 전체 너비 사용 */
+    padding-left: 5px; /* 왼쪽 여백 */
+}
+
+/* 스트레스 값 */
+.tile-stress .stress {
+    color: red;
+    font-size: 0.8rem;
+    margin: 2px 0;
+}
+
+/* 집중도 값 */
+.tile-concentration .concentration {
+    color: blue;
+    font-size: 0.8rem;
+    margin: 2px 0;
+}
+
+/* 요일 밑줄 추가 */
+.react-calendar__month-view__weekdays {
+    border-bottom: 1px solid grey;
+    padding-bottom: 5px;
+}
