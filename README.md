@@ -15,6 +15,10 @@ localhost:8080에서 백엔드 서버가 작동되고 localhost:3000에서 프�
 하드웨어는 센서로 BioAmp EXG pill을 사용하였고 Arduino r4에 물려서 사용하였습니다. 
 
    ##메인페이지 
+
+   
 ![image](https://github.com/user-attachments/assets/73d2f8d0-7356-4198-9bd1-d62bceeba36e)
  ##하드웨어
+
+ 
 ![image](https://github.com/user-attachments/assets/161b93d0-967c-436e-b0ef-1c03f36c905a)
