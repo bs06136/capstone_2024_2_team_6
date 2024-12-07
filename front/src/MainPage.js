@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import Bedtime from '@mui/icons-material/Bedtime';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
     boxShadow:
@@ -45,9 +46,11 @@ const TopAppBar = ({ unique_Number }) => {
     const [userOpen, setUserOpen] = useState(false);
     const [statisticsOpen, setStatisticsOpen] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleLogout = () => {
       if (window.confirm('정말 로그아웃 하시겠습니까?')) {
-        localStorage.removeItem('uniqueNumber');
+        localStorage.removeItem('unique_Number');
         navigate('/');
       }
     };
