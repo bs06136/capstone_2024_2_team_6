@@ -1,13 +1,15 @@
 .login {
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     justify-self: center;
-    padding: 100px;
 }
 
 .login form {
     display: flex;
     flex-direction: column;
     justify-self: center;
+}
+
+.login Button {
+    margin-top: 50px;
 }

@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './MainPage.css';
 import defaultImage from './images/default_profile.png';
 import DeviceListDialog from './component/DeviceListDialog';
@@ -8,232 +7,272 @@ import UserDetailPopup from './Page/UserDetailPopup';
 import LEDSwitch from './LEDSwitch';
 import axios from 'axios';
 import { Dialog } from "@mui/material";
+import DrousyAndStressSideBar from "./component/DrousyAndStressSideBar";
+import Statistics from "./Page/Statistics";
+import config from './config';
+import MuiCard from '@mui/material/Card';
+import { styled } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
+import Bedtime from '@mui/icons-material/Bedtime';
 
+const Card = styled(MuiCard)(({ theme }) => ({
+    boxShadow:
+        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+    ...theme.applyStyles('dark', {
+        boxShadow:
+            'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+    }),
+}));
 
-class MainPage extends Component {
-    render() {
-      return (
+const MainPage = () => {
+    const unique_Number = localStorage.getItem("unique_Number");
+    console.log(unique_Number);
+    return (
         <div className="Main">
-          <Logo></Logo>
-          <hr></hr>
-          <Body></Body>
+            <TopAppBar unique_Number={ unique_Number } />
+            <Body unique_Number={unique_Number} />
         </div>
-      );
-    }
-  }
-  
-class Logo extends Component {
-  render() {
-    return (
-      <div className="logo">
-        <h1>
-          <Link to="/">
-            캡스톤디자인 6팀
-          </Link>
-        </h1>
-        <Topbar></Topbar>
-      </div>
     );
-  }
-}
+};
 
-class Topbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      deviceOpen: false, // 다이얼로그의 열림/닫힘 상태
-      userOpen: false, // 다이얼로그의 열림/닫힘 상태
-      unique_number: props.unique_number
-    };
-  }
-
-  // 다이얼로그 열기
-  DeviceListClick = () => {
-    this.setState({ deviceOpen: true });
-  };
-
-  UserListClick = () => {
-    this.setState({ userOpen: true });
-  };
-
-  // 다이얼로그 닫기
-  DeviceListClose = () => {
-    this.setState({ deviceOpen: false });
-  };
-
-  UserListClose = () => {
-    this.setState({ userOpen: false });
-  };
-
-  render() {
-    const { deviceOpen, userOpen, unique_number } = this.state;
+const TopAppBar = ({ unique_Number }) => {
+    const [deviceOpen, setDeviceOpen] = useState(false);
+    const [userOpen, setUserOpen] = useState(false);
+    const [statisticsOpen, setStatisticsOpen] = useState(false);
 
     return (
-      <div className="topbar">
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position='static'>
+                <Toolbar>
+                    <Bedtime sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}></Bedtime>
+                    <Typography variant="h5" component="div" sx={{
+                        mr: 2,
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                    }}>
+                        캡스톤디자인 6팀
+                    </Typography>
+                    <ButtonGroup variant='contained' color='inherit' size='large' sx={{ mr: 2.3, backgroundColor: 'white', color: 'black' }}>
+                        <Button onClick={() => setUserOpen(true)}>
+                            근무자 목록
+                        </Button>
+                        <Button onClick={() => setDeviceOpen(true)}>
+                            장비 목록
+                        </Button>
+                        <Button onClick={()=> setStatisticsOpen(true)}>
+                            통계
+                        </Button>
+                    </ButtonGroup>
+                </Toolbar>
+            </AppBar>
+            <DeviceListDialog
+                open={deviceOpen}
+                onClose={() => setDeviceOpen(false)}
+                ID={unique_Number}
+            />
+            <UserListDialog
+                open={userOpen}
+                onClose={() => setUserOpen(false)}
+                userList={["User1", "User2", "User3"]}
+                ID={unique_Number}
+            />
+            <Statistics
+                open={statisticsOpen}
+                onClose={()=>setStatisticsOpen(false)}
+            />
+        </Box>
+    );
+};
+
+const Body = ({ unique_Number }) => {
+    const [dataList, setDataList] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(config.apiUrl + '/api/GET/data_renew', {
+                    params: { user_id: unique_Number },
+                });
+
+                if (response.status === 200) {
+                    const parsedData = Object.entries(response.data).map(([device_id, value]) => {
+                        const [worker_id, focus_data, stress_data] = value.split(', ');
+                        return { device_id, worker_id, focus_data,  stress_data};
+                    });
+                    setDataList(parsedData);
+                }
+            } catch (error) {
+                console.error("데이터 가져오기 오류", error);
+            }
+        };
+
+        fetchData();
+        const interval = setInterval(fetchData, 500);
+        return () => clearInterval(interval);
+    }, [unique_Number]);
+
+    return (
+        <div className="body">
+            <Sidebar unique_Number={unique_Number}/>
+            <Main dataList={dataList} />
+        </div>
+    );
+};
+
+const Sidebar = (unique_Number) => (
+    <div className="sidebar">
+        <div style={{height:"100%", margin: "auto" }}>
+            <DrousyAndStressSideBar ID={unique_Number}/>
+        </div>
+        {/*<GroupList />*/}
+        {/*<div className="bottomButton">*/}
+        {/*    <button>추가</button>*/}
+        {/*    <button>삭제</button>*/}
+        {/*    <button>수정</button>*/}
+        {/*</div>*/}
+    </div>
+);
+
+const Main = ({ dataList }) => (
+    <div className="main">
+        <Card variant='outlined' sx={{ display: "flex", height: "100%", width: "100%"}}>
+            {dataList.map((item, index) => (
+                <Profile key={index} worker_id={item.worker_id} focus_data={item.focus_data} stress_data={item.stress_data}/>
+            ))}
+        </Card>
+    </div>
+);
+
+const Profile = ({ worker_id, focus_data, stress_data }) => {
+    const [userDetailPopUp, setUserDetailPopUp] = useState(false);
+    const [name, setName] =useState(" ")
+
+    useEffect(() => {
+        // getName 함수 정의
+        const getName = async () => {
+            try {
+                const response = await axios.get(`${config.apiUrl}/api/GET/detail/${worker_id}/name`);
+                const name = response.data.name;
+                setName(name);
+            } catch (error) {
+                console.error("Error fetching name:", error);
+            }
+        };
+
+        // 5초마다 getName을 호출하도록 설정 (예: 5000ms = 5초)
+        const intervalId = setInterval(() => {
+            getName();
+        }, 500);
+
+        // 컴포넌트가 언마운트되거나 worker_id가 변경될 때마다 interval을 clear
+        return () => clearInterval(intervalId);
+
+    }, [worker_id]); // worker_id가 변경될 때마다 호출
+
+    return (
+        <div className="profile">
+            <Card variant="outlined">
+                <p>{name}</p>
+                <div className="person">
+                    {}
+                    <img
+                        src={`./images/${worker_id}.png`}
+                        alt={`${worker_id} 이미지`}
+                        onError={(e) => (e.target.src = defaultImage)} // 이미지가 없으면 기본 이미지 출력
+
+                        style={{
+                            width: "100px",
+                            height: "100px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                        }}
+                    />
+                    {}
+                    <div>
+                        {/*<p>Focus Data: {parseFloat(focus_data).toFixed(5)}</p>*/}
+                        <LEDSwitch type="focus" data={focus_data} />
+                    </div>
+                    <div>
+                        {/*<p>Stress Data: {parseFloat(stress_data).toFixed(5)}</p>*/}
+                        <LEDSwitch type="stress" data={stress_data} />
+                    </div>
+                </div>
+                <Button variant="outlined" onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</Button>
+                <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>
+                    <UserDetailPopup userId={worker_id} />
+                </Dialog>
+            </Card>
+        </div>
+    );
+};
+
+
+/*
+const Profile = ({ worker_id, focus_data, stress_data }) => {
+    const [userDetailPopUp, setUserDetailPopUp] = useState(false);
+
+    return (
+        <div className="profile">
+            <p>{worker_id}</p>
+            <div className="person">
+                {} //동적 이미지 로드
+                <img
+                    src={`./images/${worker_id}.png`}
+                    alt={`${worker_id} 이미지`}
+                    onError={(e) => (e.target.src = defaultImage)} // 이미지가 없으면 기본 이미지 출력
+
+                    style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                    }}
+                />
+                {}
+                //Focus와 Stress 데이터
+                <div>
+                    <p>Focus Data: {parseFloat(focus_data).toFixed(5)}</p>
+                    <LEDSwitch data={focus_data} />
+                </div>
+                <div>
+                    <p>Stress Data: {parseFloat(stress_data).toFixed(5)}</p>
+                    <LEDSwitch data={stress_data} />
+                </div>
+            </div>
+            {}
+            //상세 정보 확인 버튼
+            <button onClick={() => setUserDetailPopUp(true)}>상세 정보 확인</button>
+            <Dialog open={userDetailPopUp} onClose={() => setUserDetailPopUp(false)}>
+                <UserDetailPopup userId={worker_id} />
+            </Dialog>
+        </div>
+    );
+};*/
+
+const GroupList = () => (
+    <div className="grouplist">
         <ul>
-          <li onClick={ this.UserListClick }>근무자 목록</li>
-          <li onClick={ this.DeviceListClick }>장비 목록</li>
-          <li>목록 1</li>
-          <li>목록 2</li>
+            <li>메인 그룹</li>
+            <ul>
+                <li>사용자 1</li>
+                <li>사용자 2</li>
+            </ul>
+            <li>하위 그룹 1</li>
+            <ul>
+                <li>사용자 1</li>
+                <li>사용자 2</li>
+            </ul>
         </ul>
-        <DeviceListDialog open={ deviceOpen } onClose={ this.DeviceListClose }></DeviceListDialog>
-        <UserListDialog
-          open={ userOpen }
-          onClose={ this.UserListClose }
-          userList={ ["User1", "User2", "User3"] }
-        ></UserListDialog>
-      </div>
-    );
-  }
-}
-  
-class Body extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataList: [],
-      unique_number: props.unique_number
-    };
-  }
-
-  componentDidMount() {
-    this.fetchData();
-
-    // N 초마다 데이터를 갱신하도록 설정
-    this.interval = setInterval(this.fetchData, 5000);  // 5초
-  }
-
-  componentWillUnmount() {
-    // 컴포넌트 언마운트 시 interval 정리
-    clearInterval(this.interval);
-  }
-
-  fetchData = async() => {
-    const { unique_number } = this.state;
-
-    try {
-      const response = await axios.get(
-        'http://localhost:8080/api/GET/data_renew', {  // 서버 주소에 맞게 변경
-        params: {
-          user_id: "1"
-        }
-      });
-
-      if (response.status == 200) {
-        // 서버에서 받은 데이터를 JSON 형식으로 파싱하고 요소들을 구분하여 배열로 저장
-        const dataList = Object.entries(response.data).map(([device_id, value]) => {
-          const [worker_id, data] = value.split(', ');
-          return { device_id, worker_id, data };
-        });
-        // 파싱한 배열 데이터를 state에 저장
-        this.setState({ dataList });
-        //console.log("데이터 갱신중...");
-      }
-    } catch (error) {
-      console.error("데이터 가져오기 오류", error);
-    }
-  };
-
-  render() {
-    const { dataList } = this.state;
-
-    return (
-      <div className="body">
-        <Sidebar></Sidebar>
-        <Main dataList={ dataList }></Main>
-      </div>
-    )
-  }
-}
-  
-class Sidebar extends Component {
-  render() {
-    return (
-      <div className="sidebar">
-        <h1>사이드</h1>
-        <GroupList></GroupList>
-        <div className="bottomButton">
-          <button>추가</button>
-          <button>삭제</button>
-          <button>수정</button>
-        </div>
-      </div>
-    );
-  }
-}
-  
-class GroupList extends Component {
-  render() {
-    return (
-      <div className='grouplist'>
-        <ul>
-          <li>메인 그룹</li>
-          <ul>
-            <li>사용자 1</li>
-            <li>사용자 2</li>
-          </ul>
-          <li>하위 그룹 1</li>
-          <ul>
-            <li>사용자 1</li>
-            <li>사용자 2</li>
-          </ul>
-        </ul>
-      </div>
-    );
-  }
-}
-  
-class Main extends Component {
-  render() {
-    const dataList = this.props.dataList;
-
-    return (
-      <div className="main">
-        {dataList.map((item, index) => (
-          <Profile key={ index } worker_id={ item.worker_id } data={ item.data }></Profile>
-        ))}
-      </div>
-    );
-  }
-}
-  
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userDetailPopUp: false,
-    };
-  }
-
-  UserClick = () => {
-    this.setState({ userDetailPopUp: true });
-  };
-
-  UserClickClose = () => {
-    this.setState({ userDetailPopUp: false });
-  };
-
-  render() {
-    const worker_id = this.props.worker_id;
-    const data = this.props.data;
-    const { userDetailPopUp } = this.state;
-
-    return (
-      <div className="profile">
-        <p>{ worker_id }</p>
-        <div className="person">
-          <img src={ defaultImage } alt="테스트"></img>
-          {/*<LEDSwitch data={ data }></LEDSwitch>*/}
-        </div>
-        <button onClick={ this.UserClick }>
-          상세 정보 확인
-        </button>
-        <Dialog open={userDetailPopUp} onClose={this.UserClickClose}>
-          <UserDetailPopup userId={ worker_id } />
-        </Dialog>
-      </div>
-    );
-  }
-}
+    </div>
+);
 
 export default MainPage;

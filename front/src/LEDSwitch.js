@@ -3,23 +3,24 @@ import LED from './LED';
 import './LEDSwitch.css';
 
 class LEDSwitch extends Component {
-  render() {
-    const data = this.props.data;
+    render() {
+        const { type, data } = this.props;
 
-    // data에 따라 LED 색상 결정
-    const color1 = data === 'on' ? 'red' : 'gray';
-    const color2 = data === 'on' ? 'gray' : 'green';
+        // 디버깅용 로그
+        console.log("LEDSwitch Props:", { type, data });
 
-    return (
-      <div className="led-container">
-        <h3>Data: { data }</h3>
+        // 데이터 타입에 따른 라벨과 색상 결정
+        const label = type === 'focus' ? `Focus` : `Stress`;
+        const color = data >= 0.4 ? 'red' : 'green';
 
-        {/* LED 컴포넌트 */}
-        <LED color={color1} />
-        <LED color={color2} />
-      </div>
-    );
-  }
+        return (
+            <div className="led-container">
+                <h3>{label}</h3>
+                <LED color={color} />
+            </div>
+        );
+    }
 }
+
 
 export default LEDSwitch;

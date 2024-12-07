@@ -4,8 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="">
+    <list default="true" id="162722c8-2520-4dac-967c-0ee82228f826" name="변경" comment="이미지 출력 추가">
+      <change afterPath="$PROJECT_DIR$/public/images/49e08652.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/a1a52a4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/daniel.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/luis.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/49e08652.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/a1a52a4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/daniel.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/luis.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/24__11__24___7_58__________1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LEDSwitch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/LEDSwitch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Page/Statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/Statistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Page/UserAddOrEdit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserAddOrEdit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page/UserDetailPopup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Actor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Actor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/DeviceListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DeviceListDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/DrousyAndStressSideBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/DrousyAndStressSideBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/StickGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/StickGraph.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/UserListDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/UserListDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/DailyStatistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/MonthlyStatistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/statistics/StatisticsGraph.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/DrousyAndStressSideBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/DrousyAndStressSideBar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/Statistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/Statistics.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/statistics/DailyStatistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/statistics/DailyStatistics.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/statistics/MontlyStatistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/statistics/MontlyStatistics.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +65,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -43,13 +75,13 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/bs06136/capstone_2024_2_team_6&quot;,
+    &quot;url&quot;: &quot;https://github.com/bs06136/capstone_2024_2_team_6.git&quot;,
     &quot;accountId&quot;: &quot;19414d80-3fdc-49ca-a2f4-defa4f3d6a56&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
-    &quot;associatedIndex&quot;: 2
-    }</component>
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2nWBquvG8tw79RPKV6WF4ZSDCjW" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -62,13 +94,13 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;taehyeon&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;정찬혁&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.18.0&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.16.11&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/front&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/bszxc/IdeaProjects/capstone_2024_2_team_6/정찬혁/front/src/images&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -85,7 +117,55 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\bszxc\IdeaProjects\capstone_2024_2_team_6\정찬혁\front\src\images" />
+      <recent name="C:\Users\bszxc\IdeaProjects\capstone_2024_2_team_6\정찬혁\front\public\images" />
+      <recent name="C:\Users\bszxc\IdeaProjects\capstone_2024_2_team_6\정찬혁\front\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\bszxc\IdeaProjects\capstone_2024_2_team_6\정찬혁\front\public\images" />
+    </key>
+  </component>
   <component name="RunManager">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="front" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="front" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="front" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="front" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="front" />
       <working_directory value="$PROJECT_DIR$" />
@@ -136,14 +216,79 @@
       <workItem from="1730457673206" duration="597000" />
       <workItem from="1730789397024" duration="690000" />
       <workItem from="1731490076240" duration="6225000" />
-      <workItem from="1732315744420" duration="300000" />
-      <workItem from="1732316658708" duration="54000" />
-      <workItem from="1732353153327" duration="8000" />
+      <workItem from="1732315990124" duration="2351000" />
+      <workItem from="1732318396461" duration="59000" />
+      <workItem from="1732319765560" duration="608000" />
+      <workItem from="1732349922537" duration="19000" />
+      <workItem from="1732353144662" duration="8036000" />
+      <workItem from="1732601475741" duration="758000" />
+      <workItem from="1732609468119" duration="25000" />
+      <workItem from="1732609884866" duration="2917000" />
+      <workItem from="1732871399851" duration="3123000" />
+      <workItem from="1733017448306" duration="7572000" />
+      <workItem from="1733158214911" duration="8073000" />
+      <workItem from="1733222877370" duration="1960000" />
+      <workItem from="1733319556569" duration="3898000" />
+      <workItem from="1733387919543" duration="7473000" />
+      <workItem from="1733568598971" duration="74000" />
     </task>
+    <task id="LOCAL-00001" summary="오류 수정">
+      <option name="closed" value="true" />
+      <created>1732448775196</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732448775196</updated>
+    </task>
+    <task id="LOCAL-00002" summary="오류 수정">
+      <option name="closed" value="true" />
+      <created>1732449630467</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732449630467</updated>
+    </task>
+    <task id="LOCAL-00003" summary="이미지 출력 추가">
+      <option name="closed" value="true" />
+      <created>1733025173249</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1733025173249</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="정찬혁" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="오류 수정" />
+    <MESSAGE value="이미지 출력 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="이미지 출력 추가" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

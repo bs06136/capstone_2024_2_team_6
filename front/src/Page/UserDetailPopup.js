@@ -20,12 +20,13 @@ const UserDetailPopup = ({userId}) => {
     const getUserInfo = async () => {
         try
         {
+            console.log("Fetching user info for userId:", userId);
             const response =
                 await axios.get(`${config.apiUrl}/api/GET/detail/${userId}/info`);
 
-        setName(response.data["name"]);
-        setUserDetail(response.data["detail"]);
-        setOption(response.data["option_value"]);
+            setName(response.data["name"]);
+            setUserDetail(response.data["detail"]);
+            setOption(response.data["option_value"]);
         }
         catch (error) {
             //donothing
@@ -52,10 +53,17 @@ const UserDetailPopup = ({userId}) => {
     const handleDetailChange = (newDetail) => {
         setUserDetail(newDetail);
     };
-
+/*
     useEffect( () => {
-            getUserInfo();
-    }, [])
+        getUserInfo();
+    }, [])*/
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getUserInfo();
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="popup">
@@ -78,7 +86,13 @@ const UserDetailPopup = ({userId}) => {
 
             <div className="upper-part">
                 <div className="actor-section">
-                    <div className="actor"><Actor/></div>
+                    {name !== "로딩중" ? (
+                        <div className="actor">
+                            <Actor userName={name}/> {/* userName을 props로 전달 */}
+                        </div>
+                    ) : (
+                        <div>Loading...</div> // 로딩 중 메시지
+                    )}
                     <div className="user-status">
                         <Button variant="outlined">{option}</Button>
                     </div>
@@ -88,14 +102,17 @@ const UserDetailPopup = ({userId}) => {
                     <Typography fontSize="h5">{name}</Typography>
                     <Typography fontSize="h5">{userId}</Typography>
                     <div className="details" width="100%">
-                        <Detail Data={userDetail} onChange={handleDetailChange} fieldDisable="true" />
+                        <Detail Data={userDetail}
+                                onChange={handleDetailChange}
+                                fieldDisable={true}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className="lower-part">
                 <div className="graph-section">
-                    <div className="Stick-graph"><StickGraph user_Id={userId} /></div>
+                    <div className="Stick-graph"><StickGraph user_Id={userId}/></div>
                 </div>
             </div>
         </div>

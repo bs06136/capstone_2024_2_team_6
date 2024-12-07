@@ -474,7 +474,7 @@ public class DataController {
             }
 
             if (beta == 0) return 0.0f; // 나눗셈 오류 방지
-            return (theta + alpha) / beta;
+            return (alpha) / beta;
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0f;
@@ -487,7 +487,10 @@ public class DataController {
             ObjectMapper objectMapper = new ObjectMapper();
             float[] eegValues = objectMapper.readValue(eegData, float[].class);
 
-            float alpha = 0, beta = 0;
+            float theta = 0, alpha = 0, beta = 0;
+            for (int i = 5; i <= 8 && i < eegValues.length; i++) {
+                theta += eegValues[i];
+            }
             for (int i = 9; i <= 13 && i < eegValues.length; i++) {
                 alpha += eegValues[i];
             }
@@ -496,7 +499,7 @@ public class DataController {
             }
 
             if (beta == 0) return 0.0f; // 나눗셈 오류 방지
-            return alpha / beta;
+            return (theta + alpha) / beta / 5;
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0f;
